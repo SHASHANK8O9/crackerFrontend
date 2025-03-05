@@ -1,0 +1,322 @@
+"use client"
+
+import Image from "next/image"
+import { Download, ShoppingBag, Send, ChevronRight } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import ProductCard from "@/components/product-card"
+import TestimonialCard from "@/components/testimonial-card"
+import { CategoryCard } from "@/components/category-card"
+
+export default function HomePage() {
+  return (
+    <div className="flex min-h-screen flex-col ">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-red-600 to-red-700">
+        <div className="absolute inset-0 bg-[url('/sparkle-pattern.svg')] bg-repeat opacity-10"></div>
+        <div className="container relative z-10 mx-auto px-4 py-16 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
+            <div className="flex flex-col justify-center space-y-6">
+              <div className="inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium text-white backdrop-blur-sm">
+                Celebrating 10+ Years of Brightening Festivals
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
+                Light Up Your Celebrations With Premium Fireworks
+              </h1>
+              <p className="max-w-md text-lg text-white/80">
+                Discover our extensive range of high-quality crackers and fireworks for all your festive needs at
+                competitive prices.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Button size="lg" className="bg-yellow-500 text-black hover:bg-yellow-400">
+                  Shop Now <ShoppingBag className="ml-2 h-5 w-5" />
+                </Button>
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  Download Pricelist <Download className="ml-2 h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+            <div className="relative hidden lg:block">
+              <div className="relative h-[500px] w-full overflow-hidden rounded-2xl">
+                <Image
+                  src="/placeholder.svg?height=500&width=600"
+                  alt="Colorful fireworks display"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-yellow-500"></div>
+              <div className="absolute -right-6 top-1/4 h-24 w-24 rounded-full bg-red-400"></div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-0 h-16 w-full bg-gradient-to-t from-white to-transparent"></div>
+      </section>
+
+      {/* Featured Categories */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Explore Our Categories</h2>
+            <p className="mt-4 text-lg text-gray-600">Find the perfect fireworks for every occasion and celebration</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <CategoryCard title="Sparklers" icon="/placeholder.svg?height=80&width=80" href="/categories/sparklers" />
+            <CategoryCard
+              title="Ground Chakkar"
+              icon="/placeholder.svg?height=80&width=80"
+              href="/categories/ground-chakkar"
+            />
+            <CategoryCard title="Rockets" icon="/placeholder.svg?height=80&width=80" href="/categories/rockets" />
+            <CategoryCard
+              title="Flower Pots"
+              icon="/placeholder.svg?height=80&width=80"
+              href="/categories/flower-pots"
+            />
+            <CategoryCard title="Atom Bombs" icon="/placeholder.svg?height=80&width=80" href="/categories/atom-bombs" />
+            <CategoryCard title="Gift Boxes" icon="/placeholder.svg?height=80&width=80" href="/categories/gift-boxes" />
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Best Selling Products</h2>
+              <p className="mt-2 text-lg text-gray-600">Our most popular fireworks loved by customers</p>
+            </div>
+            <Button variant="outline" className="group">
+              View All Products <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <ProductCard
+              name="Deluxe Sparklers Pack"
+              image="/placeholder.svg?height=300&width=300"
+              price={199}
+              rating={4.8}
+              category="Sparklers"
+            />
+            <ProductCard
+              name="Color Flower Pots Set"
+              image="/placeholder.svg?height=300&width=300"
+              price={349}
+              rating={4.7}
+              category="Flower Pots"
+            />
+            <ProductCard
+              name="Sky Rocket Combo"
+              image="/placeholder.svg?height=300&width=300"
+              price={499}
+              rating={4.9}
+              category="Rockets"
+            />
+            <ProductCard
+              name="Festival Gift Box"
+              image="/placeholder.svg?height=300&width=300"
+              price={999}
+              rating={5.0}
+              category="Gift Boxes"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Why Choose Vasantham Crackers
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">We're committed to quality, safety, and customer satisfaction</p>
+          </div>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-xl bg-white p-6 shadow-md transition-all hover:shadow-lg">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                </svg>
+              </div>
+              <h3 className="mb-2 text-xl font-bold">Premium Quality</h3>
+              <p className="text-gray-600">
+                We source the finest materials to ensure our products meet the highest standards.
+              </p>
+            </div>
+            <div className="rounded-xl bg-white p-6 shadow-md transition-all hover:shadow-lg">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                </svg>
+              </div>
+              <h3 className="mb-2 text-xl font-bold">Customer Satisfaction</h3>
+              <p className="text-gray-600">
+                Our customers' happiness is our top priority, with prompt service and support.
+              </p>
+            </div>
+            <div className="rounded-xl bg-white p-6 shadow-md transition-all hover:shadow-lg">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </div>
+              <h3 className="mb-2 text-xl font-bold">Competitive Pricing</h3>
+              <p className="text-gray-600">
+                Enjoy the best value for your money with our economical pricing structure.
+              </p>
+            </div>
+            <div className="rounded-xl bg-white p-6 shadow-md transition-all hover:shadow-lg">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                  <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                  <path d="M4 22h16" />
+                  <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                  <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                  <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                </svg>
+              </div>
+              <h3 className="mb-2 text-xl font-bold">Safety First</h3>
+              <p className="text-gray-600">
+                All our products undergo rigorous safety checks to ensure worry-free celebrations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="bg-gradient-to-b from-red-50 to-white py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">What Our Customers Say</h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Don't just take our word for it - hear from our satisfied customers
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <TestimonialCard
+              name="Rajesh Kumar"
+              location="Chennai"
+              quote="The quality of fireworks from Vasantham Crackers is exceptional. My family was thrilled with our Diwali celebration this year!"
+              rating={5}
+              image="/placeholder.svg?height=60&width=60"
+            />
+            <TestimonialCard
+              name="Priya Sharma"
+              location="Coimbatore"
+              quote="Fast delivery and excellent product range. The gift box was perfect for my nephew's birthday celebration."
+              rating={5}
+              image="/placeholder.svg?height=60&width=60"
+            />
+            <TestimonialCard
+              name="Anand Patel"
+              location="Madurai"
+              quote="I've been buying from Vasantham for the past 5 years. Their consistent quality and service keeps me coming back."
+              rating={4}
+              image="/placeholder.svg?height=60&width=60"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-red-600 py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Ready to Light Up Your Celebration?
+            </h2>
+            <p className="mt-4 text-lg text-white/80">
+              Browse our extensive collection of premium fireworks or download our latest pricelist
+            </p>
+            <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+              <Button size="lg" className="bg-yellow-500 text-black hover:bg-yellow-400">
+                Shop Now <ShoppingBag className="ml-2 h-5 w-5" />
+              </Button>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                Download Pricelist <Download className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl rounded-2xl bg-gray-50 p-8 shadow-sm">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900">Stay Updated with Latest Offers</h2>
+              <p className="mt-2 text-gray-600">
+                Subscribe to our newsletter for exclusive deals and festival specials
+              </p>
+            </div>
+            <form className="mt-6">
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 rounded-lg border border-gray-300 px-4 py-3 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/20"
+                  required
+                />
+                <Button type="submit" className="bg-red-600 hover:bg-red-700">
+                  Subscribe <Send className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
