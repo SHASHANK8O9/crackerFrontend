@@ -8,6 +8,46 @@ import ProductCard from "@/components/product-card"
 import TestimonialCard from "@/components/testimonial-card"
 import { CategoryCard } from "@/components/category-card"
 
+const products = [
+  {
+    id: 1,
+    name: "Cosmic Blast",
+    description:
+      "Experience the ultimate thrill with our premium Cosmic Blast firecracker. Creates a spectacular display of colors with loud, satisfying bangs.",
+    price: 24.99,
+    originalPrice: 29.99,
+    rating: 4,
+    reviewCount: 24,
+    image: "/placeholder.svg?height=300&width=500",
+    isNew: true,
+    limitedStock: true,
+  },
+  {
+    id: 2,
+    name: "Thunder King",
+    description:
+      "The Thunder King produces a massive boom that will shake the ground beneath your feet. Perfect for celebrations and special events.",
+    price: 19.99,
+    rating: 5,
+    reviewCount: 18,
+    image: "/placeholder.svg?height=300&width=500",
+    limitedStock: false,
+  },
+  {
+    id: 3,
+    name: "Color Fountain",
+    description:
+      "A beautiful fountain of colorful sparks that lasts for over a minute. Safe for family celebrations and creates amazing photo opportunities.",
+    price: 14.99,
+    originalPrice: 17.99,
+    rating: 4,
+    reviewCount: 32,
+    image: "/placeholder.svg?height=300&width=500",
+    isNew: false,
+    limitedStock: false,
+  },
+]
+
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col ">
@@ -93,34 +133,9 @@ export default function HomePage() {
             </Button>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <ProductCard
-              name="Deluxe Sparklers Pack"
-              image="/placeholder.svg?height=300&width=300"
-              price={199}
-              rating={4.8}
-              category="Sparklers"
-            />
-            <ProductCard
-              name="Color Flower Pots Set"
-              image="/placeholder.svg?height=300&width=300"
-              price={349}
-              rating={4.7}
-              category="Flower Pots"
-            />
-            <ProductCard
-              name="Sky Rocket Combo"
-              image="/placeholder.svg?height=300&width=300"
-              price={499}
-              rating={4.9}
-              category="Rockets"
-            />
-            <ProductCard
-              name="Festival Gift Box"
-              image="/placeholder.svg?height=300&width=300"
-              price={999}
-              rating={5.0}
-              category="Gift Boxes"
-            />
+            {products.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
           </div>
         </div>
       </section>

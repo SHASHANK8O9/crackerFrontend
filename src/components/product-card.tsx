@@ -1,34 +1,70 @@
 "use client"
 
 import Image from "next/image"
-import { Star, Plus, Minus, ShoppingCart } from "lucide-react"
+import { Star, ShoppingCart } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { toast } from "sonner"
+import { useCart } from "@/contexts/cart-contexts"
 
-interface ProductCardProps {
+type ProductCardProps = {
+    id: number
     name: string
-    image: string
+    description: string
     price: number
+    originalPrice?: number
     rating: number
-    category: string
-    discount?: number
+    reviewCount: number
+    image: string
+    isNew?: boolean
+    limitedStock?: boolean
+    category?: string
 }
 
-export default function ProductCard({ name, image, price, rating, category, discount }: ProductCardProps) {
-    const [quantity, setQuantity] = useState(1)
+export default function ProductCard({
+    id,
+    name,
+    description,
+    price,
+    originalPrice,
+    rating,
+    reviewCount,
+    image = "/placeholder.svg?height=300&width=500",
+    isNew = false,
+    limitedStock = false,
+    category = "Firecracker",
+}: ProductCardProps) {
+    const { addItem } = useCart()
     const [isHovered, setIsHovered] = useState(false)
+    const [isAdding, setIsAdding] = useState(false)
 
-    const increaseQuantity = () => {
-        setQuantity((prev) => prev + 1)
-    }
+    // Calculate discount percentage if originalPrice exists
+    const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : undefined
 
-    const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity((prev) => prev - 1)
-        }
+    const handleAddToCart = () => {
+        setIsAdding(true)
+
+        // Add item to cart
+        addItem({
+            id,
+            name,
+            price,
+            quantity: 1,
+            image,
+        })
+
+        // Show toast notification
+        toast.success("Added to cart", {
+            description: `${name} has been added to your cart.`,
+        })
+
+        // Reset button state after a short delay
+        setTimeout(() => {
+            setIsAdding(false)
+        }, 500)
     }
 
     return (
@@ -36,11 +72,18 @@ export default function ProductCard({ name, image, price, rating, category, disc
             className="group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all"
             onHoverStart={() => setIsHovered(true)}
             onHoverEnd={() => setIsHovered(false)}
-            layoutId={`product-card-${name}`}
+            layoutId={`product-card-${id}`}
         >
-            {discount && (
-                <Badge className="absolute right-3 top-3 z-10 bg-yellow-500 text-black font-semibold">{discount}% OFF</Badge>
-            )}
+            {/* Badges */}
+            <div className="absolute right-3 top-3 z-10 flex flex-col gap-2">
+                {discount && <Badge className="bg-yellow-500 text-black font-semibold">{discount}% OFF</Badge>}
+                {isNew && <Badge className="bg-red-500 hover:bg-red-600">New</Badge>}
+                {limitedStock && (
+                    <Badge variant="outline" className="bg-white/80">
+                        Limited Stock
+                    </Badge>
+                )}
+            </div>
 
             {/* Product image with gradient overlay */}
             <div className="relative h-64 overflow-hidden">
@@ -77,41 +120,22 @@ export default function ProductCard({ name, image, price, rating, category, disc
                             />
                         ))}
                     </div>
-                    <span className="text-sm text-gray-500">{rating}</span>
+                    <span className="text-sm text-gray-500">({reviewCount})</span>
                 </div>
+
+                {/* Description - truncated */}
+                <p className="mb-3 text-sm text-gray-500 line-clamp-2">{description}</p>
 
                 {/* Price */}
                 <div className="mb-4 flex items-center justify-between">
-                    <div className="text-xl font-bold text-gray-900">₹{price}</div>
-                    {discount && (
-                        <div className="text-sm text-gray-500 line-through">₹{Math.round(price / (1 - discount / 100))}</div>
-                    )}
+                    <div className="text-xl font-bold text-gray-900">₹{price.toFixed(2)}</div>
+                    {originalPrice && <div className="text-sm text-gray-500 line-through">₹{originalPrice.toFixed(2)}</div>}
                 </div>
 
-                {/* Quantity selector */}
-                {/* <div className="mb-4 flex items-center justify-between rounded-lg border border-gray-200 p-1">
-                    <button
-                        onClick={decreaseQuantity}
-                        className="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
-                        disabled={quantity <= 1}
-                    >
-                        <Minus className="h-4 w-4" />
-                    </button>
-
-                    <span className="text-center text-gray-700 w-8">{quantity}</span>
-
-                    <button
-                        onClick={increaseQuantity}
-                        className="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600"
-                    >
-                        <Plus className="h-4 w-4" />
-                    </button>
-                </div> */}
-
                 {/* Add to cart button */}
-                <Button className="w-full bg-red-600 hover:bg-red-700 gap-2 py-6">
+                <Button className="w-full bg-red-600 hover:bg-red-700 gap-2 py-6" onClick={handleAddToCart} disabled={isAdding}>
                     <ShoppingCart className="h-5 w-5" />
-                    Add to Cart
+                    {isAdding ? "Adding..." : "Add to Cart"}
                 </Button>
             </div>
 

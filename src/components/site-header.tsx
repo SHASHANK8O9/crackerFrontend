@@ -2,11 +2,12 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Phone, MapPin, Download, Menu, X, Plus, Minus } from 'lucide-react'
+import { Phone, MapPin, Download, Menu, X } from "lucide-react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { Button } from "@/components/ui/button"
+import CartView from "./cart-view"
 
 export default function SiteHeader() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -98,10 +99,18 @@ export default function SiteHeader() {
                         <Button size="sm" className="ml-3 bg-red-600 hover:bg-red-700">
                             <Download className="mr-2 h-4 w-4" /> Download Pricelist
                         </Button>
+
+                        {/* Cart Component */}
+                        <div className="ml-3">
+                            <CartView />
+                        </div>
                     </nav>
 
-                    {/* Mobile menu button */}
-                    <div className="flex md:hidden">
+                    {/* Mobile menu and cart buttons */}
+                    <div className="flex items-center md:hidden">
+                        <div className="mr-2">
+                            <CartView />
+                        </div>
                         <button
                             type="button"
                             className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 hover:text-red-600"
@@ -203,3 +212,4 @@ export default function SiteHeader() {
         </header>
     )
 }
+
