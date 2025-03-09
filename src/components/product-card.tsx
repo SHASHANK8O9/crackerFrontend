@@ -74,19 +74,20 @@ export default function ProductCard({
             onHoverEnd={() => setIsHovered(false)}
             layoutId={`product-card-${id}`}
         >
-            {/* Badges */}
-            <div className="absolute right-3 top-3 z-10 flex flex-col gap-2">
-                {discount && <Badge className="bg-yellow-500 text-black font-semibold">{discount}% OFF</Badge>}
-                {isNew && <Badge className="bg-red-500 hover:bg-red-600">New</Badge>}
-                {limitedStock && (
-                    <Badge variant="outline" className="bg-white/80">
-                        Limited Stock
-                    </Badge>
-                )}
-            </div>
+
 
             {/* Product image with gradient overlay */}
             <div className="relative h-64 overflow-hidden">
+                {/* Badges */}
+                <div className="absolute right-3 top-3 z-10 flex flex-col gap-2  w-full h-full">
+                    {discount && <Badge className="bg-yellow-500 absolute left-5 text-black font-semibold">{discount}% OFF</Badge>}
+                    {isNew && <Badge className="bg-red-500 absolute -right-1 hover:bg-red-600">New</Badge>}
+                    {limitedStock && (
+                        <Badge variant="outline" className="bg-white/80 absolute bottom-4 -right-1">
+                            Limited Stock
+                        </Badge>
+                    )}
+                </div>
                 <Image
                     src={image || "/placeholder.svg"}
                     alt={name}
@@ -139,10 +140,10 @@ export default function ProductCard({
                 </Button>
             </div>
 
-            {/* Decorative corner fold */}
+            {/* Decorative corner fold
             <div className="absolute -top-px -right-px h-16 w-16 overflow-hidden">
                 <div className="absolute top-0 right-0 h-4 w-4 -translate-y-1/2 translate-x-1/2 rotate-45 bg-red-600"></div>
-            </div>
+            </div> */}
         </motion.div>
     )
 }
