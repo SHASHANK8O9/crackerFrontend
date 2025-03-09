@@ -1,25 +1,26 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ProductForm } from "@/components/product-form"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { mockProducts, type Product } from "@/lib/data"
 
 interface EditProductPageProps {
-    params: {
-        id: string
-    }
+
+    id: string
 }
 
-export default function EditProductPage({ params }: EditProductPageProps) {
+export default function EditProductPage({ params }: { params: Promise<EditProductPageProps> }) {
+    const { id } = use(params)
+    console.log(id, "params id")
     const router = useRouter()
     const [product, setProduct] = useState<Product | null>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         // In a real app, you would fetch the product from an API
-        const foundProduct = mockProducts.find((p) => p.id === params.id)
+        const foundProduct = mockProducts.find((p) => p.id === id)
 
         if (foundProduct) {
             setProduct(foundProduct)
@@ -29,7 +30,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
         }
 
         setLoading(false)
-    }, [params.id, router])
+    }, [id, router])
 
     if (loading) {
         return (
@@ -49,7 +50,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
                     <CardDescription>Update the details for this product.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ProductForm productId={params.id} initialData={product} />
+                    <ProductForm productId={id} initialData={product} />
                 </CardContent>
             </Card>
         </div>
