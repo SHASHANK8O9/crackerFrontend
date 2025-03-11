@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
+import axios from 'axios';
 
 const formSchema = z.object({
     email: z.string().email({
@@ -34,30 +35,27 @@ export default function LoginPage() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // This is where you would normally authenticate with a backend
         // For now, we'll just accept any valid form submission
 
-        // Mock credentials for demo purposes
-        if (values.email === "admin@example.com" && values.password === "password") {
-            // Store some user info in localStorage (in a real app, you'd use a more secure method)
-            localStorage.setItem("isLoggedIn", "true")
-            localStorage.setItem(
-                "user",
-                JSON.stringify({
-                    name: "Admin User",
-                    email: values.email,
-                    avatar: "/placeholder-user.jpg",
-                }),
-            )
-
-            // Redirect to dashboard
+        try {
+            await axios.post('/api/auth/login', values)
             router.push("/admin")
-        } else {
-            toast.error("Invalid credentials", {
-                description: "Please use admin@example.com / password for demo",
-            })
+        } catch (error) {
+            // Handle different error scenarios
+            if (axios.isAxiosError(error)) {
+                toast.error(error.response?.data?.message || error.message)
+                console.error("Axios Error:", error.response?.data?.message || error.message);
+            } else {
+                console.error("Unexpected Error:", error);
+            }
         }
+
+        // toast.error("Invalid credentials", {
+        //     description: "Please use admin@example.com / password for demo",
+        // })
+
     }
 
     return (

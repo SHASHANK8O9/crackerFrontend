@@ -1,12 +1,13 @@
 "use client"
 
 import Image from "next/image"
-import { Download, ShoppingBag, Send, ChevronRight } from "lucide-react"
+import { Download, ShoppingBag, Send, ChevronRight, ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import ProductCard from "@/components/product-card"
 import TestimonialCard from "@/components/testimonial-card"
 import { CategoryCard } from "@/components/category-card"
+import Link from "next/link"
 
 const products = [
   {
@@ -52,47 +53,33 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col ">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-red-600 to-red-700">
-        <div className="absolute inset-0 bg-[url('/sparkle-pattern.svg')] bg-repeat opacity-10"></div>
-        <div className="container relative z-10 mx-auto px-4 py-16 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
-            <div className="flex flex-col justify-center space-y-6">
-              <div className="inline-block rounded-full bg-white/10 px-4 py-1 text-sm font-medium text-white backdrop-blur-sm">
-                Celebrating 10+ Years of Brightening Festivals
-              </div>
-              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-                Light Up Your Celebrations With Premium Fireworks
-              </h1>
-              <p className="max-w-md text-lg text-white/80">
-                Discover our extensive range of high-quality crackers and fireworks for all your festive needs at
-                competitive prices.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-yellow-500 text-black hover:bg-yellow-400">
-                  Shop Now <ShoppingBag className="ml-2 h-5 w-5" />
-                </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  Download Pricelist <Download className="ml-2 h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-            <div className="relative hidden lg:block">
-              <div className="relative h-[500px] w-full overflow-hidden rounded-2xl">
-                <Image
-                  src="/placeholder.svg?height=500&width=600"
-                  alt="Colorful fireworks display"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-yellow-500"></div>
-              <div className="absolute -right-6 top-1/4 h-24 w-24 rounded-full bg-red-400"></div>
-            </div>
+      <div className="w-full min-h-[90vh] bg-gradient-to-br from-blue-50 to-red-100 flex flex-col items-center justify-center px-4 py-20">
+        <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
+          {/* Top CTA button */}
+          <Link href="/brands" className="mb-16">
+            <Button
+              variant="outline"
+              className="rounded-full border border-red-300 bg-white/80 text-red-500 hover:bg-white hover:text-red-600 transition-all duration-300 px-6 py-2 h-auto"
+            >
+              Explore how to use for celebrations
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+
+          {/* Main heading */}
+          <div className="text-center max-w-4xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-4">
+              Light up your Events with <span className="text-red-600">our Firecrackers</span>
+            </h1>
+
+            <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+              Experience premium quality and discover a safer way to celebrate your special occasions brilliantly.
+            </p>
+
+            <Button className="bg-red-500 cursor-pointer hover:bg-red-600/90">Shop Our Collection</Button>
           </div>
         </div>
-        <div className="absolute bottom-0 h-16 w-full bg-gradient-to-t from-white to-transparent"></div>
-      </section>
+      </div>
 
       {/* Featured Categories */}
       <section className="py-16">
@@ -102,20 +89,20 @@ export default function HomePage() {
             <p className="mt-4 text-lg text-gray-600">Find the perfect fireworks for every occasion and celebration</p>
           </div>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            <CategoryCard title="Sparklers" icon="/placeholder.svg?height=80&width=80" href="/categories/sparklers" />
+            <CategoryCard title="Sparklers" icon="/sparkles.png" href="/categories/sparklers" />
             <CategoryCard
               title="Ground Chakkar"
-              icon="/placeholder.svg?height=80&width=80"
+              icon="/chakri.png"
               href="/categories/ground-chakkar"
             />
-            <CategoryCard title="Rockets" icon="/placeholder.svg?height=80&width=80" href="/categories/rockets" />
+            <CategoryCard title="Rockets" icon="/rocket.png" href="/categories/rockets" />
             <CategoryCard
               title="Flower Pots"
-              icon="/placeholder.svg?height=80&width=80"
+              icon="/anaar.png"
               href="/categories/flower-pots"
             />
-            <CategoryCard title="Atom Bombs" icon="/placeholder.svg?height=80&width=80" href="/categories/atom-bombs" />
-            <CategoryCard title="Gift Boxes" icon="/placeholder.svg?height=80&width=80" href="/categories/gift-boxes" />
+            <CategoryCard title="Atom Bombs" icon="/bomb.png" href="/categories/atom-bombs" />
+            <CategoryCard title="Gift Boxes" icon="/gift.png" href="/categories/gift-boxes" />
           </div>
         </div>
       </section>
