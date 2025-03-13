@@ -9,7 +9,6 @@ export async function middleware(request: NextRequest) {
   const protectedRoutes = ["/admin"];
   const protectedApiRoutes = ["/api"];
   const publicApiRoutes = [
-    "/login",
     "/api/auth/login",
     "/api/auth/signup",
     "/api/auth/forgot-password",
@@ -28,6 +27,10 @@ export async function middleware(request: NextRequest) {
 
   // Get the JWT from cookies
   const token = request.cookies.get("token")?.value;
+  // ✅ If user is authenticated and tries to access "/login", redirect them to "/admin"
+  if (pathname === "/login" && token) {
+    return NextResponse.redirect(new URL("/admin", request.url));
+  }
   // Verify the token if it's a protected route
   if (isProtectedRoute || isProtectedApiRoute) {
     if (!token) {

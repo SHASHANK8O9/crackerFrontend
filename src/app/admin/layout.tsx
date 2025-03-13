@@ -14,17 +14,10 @@ export default function DashboardLayout({
     children: React.ReactNode
 }) {
     const router = useRouter()
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     // Check if user is logged in on client side
-    useEffect(() => {
-        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"
-        if (!isLoggedIn) {
-            router.push("/login")
-        } else {
-            setIsLoading(false)
-        }
-    }, [router])
+
 
     if (isLoading) {
         return (
