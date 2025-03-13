@@ -284,7 +284,7 @@ export default function HomePage() {
               <Button size="lg" className="bg-yellow-500 text-black hover:bg-yellow-400">
                 Shop Now <ShoppingBag className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="border-white text-red-500">
                 Download Pricelist <Download className="ml-2 h-5 w-5" />
               </Button>
             </div>
