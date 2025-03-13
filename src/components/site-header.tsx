@@ -71,9 +71,6 @@ export default function SiteHeader() {
                         <Link href="/products" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600">
                             Products
                         </Link>
-                        <Link href="/price-list" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600">
-                            Price List
-                        </Link>
                         <Link href="/gift-box" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600">
                             Gift Box
                         </Link>
