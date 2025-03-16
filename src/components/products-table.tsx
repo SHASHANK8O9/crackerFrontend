@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import {
     type ColumnDef,
@@ -29,15 +29,15 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
-import { mockProducts, type Product } from "@/lib/data"
+import axios from "axios"
 
 export function ProductsTable() {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = useState({})
-    const [data, setData] = useState<Product[]>(mockProducts)
+    const [data, setData] = useState<any[]>([])
 
-    const columns: ColumnDef<Product>[] = [
+    const columns: ColumnDef<any>[] = [
         {
             id: "select",
             header: ({ table }) => (
@@ -58,23 +58,21 @@ export function ProductsTable() {
             enableHiding: false,
         },
         {
-            accessorKey: "name",
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                        Product
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
+            accessorKey: "title",
+            header: ({ column }) => (
+                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Product
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => (
                 <div className="flex items-center gap-3">
                     <img
-                        src={row.original.image || "/placeholder.svg"}
-                        alt={row.getValue("name")}
+                        src={row.original?.banner?.secure_url || "/placeholder.svg"} // Assuming banner contains a URL
+                        alt={row.getValue("title")}
                         className="h-10 w-10 rounded-md object-cover"
                     />
-                    <span>{row.getValue("name")}</span>
+                    <span>{row.getValue("title")}</span>
                 </div>
             ),
         },
@@ -85,27 +83,25 @@ export function ProductsTable() {
         },
         {
             accessorKey: "price",
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                        Price
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
+            header: ({ column }) => (
+                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Price
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => {
-                const price = Number.parseFloat(row.getValue("price"))
-                const discountedPrice = row.original.discountedPrice
+                const price = row.original.price
+                const discountedPrice = row.original.discount
 
                 return (
                     <div className="flex flex-col">
                         {discountedPrice ? (
                             <>
-                                <span className="text-sm line-through text-muted-foreground">${price.toFixed(2)}</span>
-                                <span className="font-medium text-green-600">${discountedPrice.toFixed(2)}</span>
+                                <span className="text-sm line-through text-muted-foreground">Rs{price.toFixed(2)}</span>
+                                <span className="font-medium text-green-600">Rs{discountedPrice.toFixed(2)}</span>
                             </>
                         ) : (
-                            <span className="font-medium">${price.toFixed(2)}</span>
+                            <span className="font-medium">Rs{price.toFixed(2)}</span>
                         )}
                     </div>
                 )
@@ -113,21 +109,15 @@ export function ProductsTable() {
         },
         {
             accessorKey: "quantity",
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                        Quantity
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
+            header: "Quantity",
             cell: ({ row }) => <div className="text-center">{row.getValue("quantity")}</div>,
         },
         {
             accessorKey: "status",
             header: "Status",
             cell: ({ row }) => {
-                const status = row.getValue("status") as string
+                const status = row.original.stockStatus
+                console.log("status", row)
 
                 return (
                     <div
@@ -148,14 +138,24 @@ export function ProductsTable() {
             cell: ({ row }) => {
                 const product = row.original
 
-                const handleDelete = () => {
-                    // In a real app, you would call an API to delete the product
-                    setData(data.filter((p) => p.id !== product.id))
+                const handleDelete = async (id: string) => {
+                    const confirmDelete = confirm("Are you sure you want to delete this product ?");
+                    if (!confirmDelete) return;
 
-                    toast.success("Product deleted", {
-                        description: `${product.name} has been deleted.`,
-                    })
-                }
+                    try {
+                        const deleted = await axios.delete(`/api/product/${id}`);
+
+                        if (!deleted?.status) {
+                            toast.error("Failed To Delete !!");
+                            return;
+                        }
+                        fetchProducts();
+                    } catch (error) {
+                        console.error("Error deleting category:", error);
+                        toast.error("Failed To Delete !!");
+
+                    }
+                };
 
                 return (
                     <DropdownMenu>
@@ -168,13 +168,13 @@ export function ProductsTable() {
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem asChild>
-                                <Link href={`/admin/products/${product.id}`}>
+                                <Link href={`/admin/products/${product._id}`}>
                                     <Edit className="mr-2 h-4 w-4" />
                                     Edit
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={handleDelete} className="text-red-600">
+                            <DropdownMenuItem onClick={() => handleDelete(row?.original?._id)} className="text-red-600">
                                 <Trash className="mr-2 h-4 w-4" />
                                 Delete
                             </DropdownMenuItem>
@@ -202,60 +202,39 @@ export function ProductsTable() {
         },
     })
 
+    async function fetchProducts() {
+        try {
+            const res = await axios.get("/api/product")
+            setData(res?.data?.data)
+        } catch (error) {
+            console.error("Error fetching products:", error)
+        }
+    }
+
+    useEffect(() => {
+        fetchProducts()
+    }, [])
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <Input
                     placeholder="Filter products..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)}
                     className="max-w-sm"
                 />
-                <div className="flex items-center gap-2">
-                    <Select
-                        value={(table.getColumn("category")?.getFilterValue() as string) ?? ""}
-                        onValueChange={(value) => table.getColumn("category")?.setFilterValue(value === "all" ? "" : value)}
-                    >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="All Categories" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Categories</SelectItem>
-                            <SelectItem value="Electronics">Electronics</SelectItem>
-                            <SelectItem value="Clothing">Clothing</SelectItem>
-                            <SelectItem value="Home">Home</SelectItem>
-                            <SelectItem value="Accessories">Accessories</SelectItem>
-                            <SelectItem value="Fitness">Fitness</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <Select
-                        value={(table.getColumn("status")?.getFilterValue() as string) ?? ""}
-                        onValueChange={(value) => table.getColumn("status")?.setFilterValue(value === "all" ? "" : value)}
-                    >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="All Statuses" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Statuses</SelectItem>
-                            <SelectItem value="In Stock">In Stock</SelectItem>
-                            <SelectItem value="Low Stock">Low Stock</SelectItem>
-                            <SelectItem value="Out of Stock">Out of Stock</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
             </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id}>
-                                            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                                        </TableHead>
-                                    )
-                                })}
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
@@ -278,26 +257,6 @@ export function ProductsTable() {
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-between">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-                    selected.
-                </div>
-                <div className="flex items-center space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Previous
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                        Next
-                    </Button>
-                </div>
-            </div>
         </div>
     )
 }
-

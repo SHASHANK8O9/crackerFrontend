@@ -9,7 +9,7 @@ export default function ProductsPage() {
             <div className="flex items-center justify-between">
                 <h2 className="text-3xl font-bold tracking-tight">Products</h2>
                 <Button asChild>
-                    <Link href="/dashboard/products/new">Add Product</Link>
+                    <Link href="/admin/products/new">Add Product</Link>
                 </Button>
             </div>
 
