@@ -14,7 +14,7 @@ const users: User[] = [
   {
     id: 1,
     email: "admin@example.com",
-    password: "$2y$10$W1TiWEQif59UyJiDzJv8u.ZTIjMq69bDSeYLcg1/gMz5R/QQ9bkC.",
+    password: "$2a$12$B./PpJrP9onlKXbTif547uAYCPFJyhIc0Ym9Wdu.dbytKv.LuCNju",
     role: "admin",
   }, // Replace with a bcrypt hash
 ];

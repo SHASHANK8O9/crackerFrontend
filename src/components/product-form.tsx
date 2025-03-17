@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -16,6 +16,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { Product } from "@/lib/data"
 import { toast } from "sonner"
+import axios from "axios"
+import { title } from "process"
+
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -54,14 +57,16 @@ interface ProductFormProps {
 export function ProductForm({ productId, initialData }: ProductFormProps) {
     const router = useRouter()
     const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null)
-
+    const [isLoading,setIsLoading]= useState(false);
+    const [selectedFile,setSelectedFile] = useState<any>(null);
+    const [categoriesData,setCategoriesData] = useState(null);
     // Default values for the form
     const defaultValues: Partial<ProductFormValues> = {
         name: initialData?.name || "",
         description: initialData?.description || "",
         category: initialData?.category || "",
         price: initialData?.price || 0,
-        discountedPrice: initialData?.discountedPrice || undefined,
+        discountedPrice: initialData?.discountedPrice || 0,
         quantity: initialData?.quantity || 0,
         status: initialData?.status || "In Stock",
     }
@@ -71,13 +76,80 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
         defaultValues,
     })
 
-    function onSubmit(values: ProductFormValues) {
+
+    //on submit first im sending image to cloudinary and then im sending that data to the backend.
+    //we might implement deletion functionality if somehow the product creation api fails we need to delete that uploaded image to roll back changes
+    async function onSubmit(values: ProductFormValues) {
         // Here you would typically send the data to your API
-        console.log(values)
+
+            let formData = new FormData();
+
+            if(selectedFile == null)
+            {
+                toast.error("Please Choose A Valid Banner Image");
+                return ;
+            }
+
+
+        formData.append("file",selectedFile);
+        formData.append("upload_preset", "TESTING_PRESET");
+        formData.append("folder ", "DUMMY");
+
+        formData.forEach((key,values)=>{
+            console.log("Key : Values",key,values)
+        })
+       setIsLoading(true);
+       console.log(process.env,"NEXT_CLOUDINARY_UNSIGNED_UPLOAD_URL");
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_URL}/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
+            formData
+        );
+
+        if(!res?.data?.asset_id
+        )
+        {
+            console.log("Failed To Upload Image !!");
+            toast.error("Failed To Upload Images !!");
+            return;
+        }
+
+        const {asset_id,public_id,eager} = res?.data;
+
+        const productData = {banner:{
+            asset_id,
+            public_id,
+            secure_url:eager?.[0]?.secure_url
+        },
+       title:values.name,
+       description:values.description,
+       quantity:values.quantity,
+       price:values.price,
+       stockStatus:values.status,
+       discount:values.discountedPrice,
+       category:values.category,
+       slug:values.name.toLowerCase()
+        };
+
+
+
+        formData.forEach((key,value)=>{
+            console.log(`key:${key} , value:${value}`)
+        })
+
+        const sendData = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}product`,productData);
+
+        if(!sendData?.data.status)
+        {
+          
+            toast.error("Failed To Create Product !!");
+            return ;
+        }
+          
 
         toast.success(productId ? "Product updated" : "Product created", {
             description: `${values.name} has been ${productId ? "updated" : "created"} successfully.`,
         })
+
+        setIsLoading(false);
 
         // Redirect to products page after submission
         router.push("/admin/products")
@@ -91,8 +163,24 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                 setImagePreview(e.target?.result as string)
             }
             reader.readAsDataURL(file)
+            setSelectedFile(file);
         }
     }
+
+
+    async function fetchCategories() {
+      try {
+        const res = await axios.get("/api/categories");
+        setCategoriesData(res?.data?.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        // setLoading(false);
+      }
+    }
+    useEffect(()=>{
+        fetchCategories()
+    },[])
 
     return (
         <Form {...form}>
@@ -140,11 +228,17 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="Electronics">Electronics</SelectItem>
-                                            <SelectItem value="Clothing">Clothing</SelectItem>
+
+                                            {
+                                                categoriesData && categoriesData?.map((cat,idx)=>{
+                                                    return  <SelectItem key={idx} value={cat?._id}>{cat?.title}</SelectItem>
+
+                                                })
+                                            }
+                                            {/* <SelectItem value="Clothing">Clothing</SelectItem>
                                             <SelectItem value="Home">Home</SelectItem>
                                             <SelectItem value="Accessories">Accessories</SelectItem>
-                                            <SelectItem value="Fitness">Fitness</SelectItem>
+                                            <SelectItem value="Fitness">Fitness</SelectItem> */}
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
@@ -276,12 +370,12 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                     </div>
                 </div>
 
-                <div className="flex justify-end gap-4">
+               {isLoading ? <div>Loading...</div> : <div className="flex justify-end gap-4">
                     <Button type="button" variant="outline" onClick={() => router.push("/dashboard/products")}>
                         Cancel
                     </Button>
                     <Button type="submit">{productId ? "Update Product" : "Create Product"}</Button>
-                </div>
+                </div>}
             </form>
         </Form>
     )
