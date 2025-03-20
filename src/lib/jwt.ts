@@ -12,7 +12,7 @@ interface UserPayload extends JWTPayload {
 export const generateToken = async (user: UserPayload) => {
   return await new SignJWT(user)
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("1h")
+    .setExpirationTime("24h")
     .sign(secret);
 };
 

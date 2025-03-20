@@ -14,10 +14,9 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { Product } from "@/lib/data"
+import { type Product } from "@/lib/data"
 import { toast } from "sonner"
 import axios from "axios"
-import { title } from "process"
 
 
 const formSchema = z.object({
@@ -56,19 +55,19 @@ interface ProductFormProps {
 
 export function ProductForm({ productId, initialData }: ProductFormProps) {
     const router = useRouter()
-    const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null)
-    const [isLoading,setIsLoading]= useState(false);
-    const [selectedFile,setSelectedFile] = useState<any>(null);
-    const [categoriesData,setCategoriesData] = useState(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(initialData?.banner?.secure_url || null)
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<any>(null);
+    const [categoriesData, setCategoriesData] = useState(null);
     // Default values for the form
     const defaultValues: Partial<ProductFormValues> = {
-        name: initialData?.name || "",
+        name: initialData?.title || "",
         description: initialData?.description || "",
         category: initialData?.category || "",
         price: initialData?.price || 0,
-        discountedPrice: initialData?.discountedPrice || 0,
+        discountedPrice: initialData?.discount || 0,
         quantity: initialData?.quantity || 0,
-        status: initialData?.status || "In Stock",
+        status: initialData?.stockStatus || "In Stock",
     }
 
     const form = useForm<ProductFormValues>({
@@ -82,68 +81,75 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
     async function onSubmit(values: ProductFormValues) {
         // Here you would typically send the data to your API
 
-            let formData = new FormData();
-
-            if(selectedFile == null)
-            {
-                toast.error("Please Choose A Valid Banner Image");
-                return ;
-            }
-
-
-        formData.append("file",selectedFile);
-        formData.append("upload_preset", "TESTING_PRESET");
-        formData.append("folder ", "DUMMY");
-
-        formData.forEach((key,values)=>{
-            console.log("Key : Values",key,values)
-        })
-       setIsLoading(true);
-       console.log(process.env,"NEXT_CLOUDINARY_UNSIGNED_UPLOAD_URL");
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_URL}/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
-            formData
-        );
-
-        if(!res?.data?.asset_id
-        )
-        {
-            console.log("Failed To Upload Image !!");
-            toast.error("Failed To Upload Images !!");
+        let formData = new FormData();
+        let res;
+        if (selectedFile == null && !productId) {
+            toast.error("Please Choose A Valid Banner Image");
             return;
         }
+        if (selectedFile) {
+            formData.append("file", selectedFile);
+            formData.append("upload_preset", "TESTING_PRESET");
+            formData.append("folder ", "DUMMY");
 
-        const {asset_id,public_id,eager} = res?.data;
+            formData.forEach((key, values) => {
+                console.log("Key : Values", key, values)
+            })
+            setIsLoading(true);
+            console.log(process.env, "NEXT_CLOUDINARY_UNSIGNED_UPLOAD_URL");
+            res = await axios.post(`${process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_URL}/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
+                formData
+            );
 
-        const productData = {banner:{
-            asset_id,
-            public_id,
-            secure_url:eager?.[0]?.secure_url
-        },
-       title:values.name,
-       description:values.description,
-       quantity:values.quantity,
-       price:values.price,
-       stockStatus:values.status,
-       discount:values.discountedPrice,
-       category:values.category,
-       slug:values.name.toLowerCase()
+            if (!res?.data?.asset_id
+            ) {
+                console.log("Failed To Upload Image !!");
+                toast.error("Failed To Upload Images !!");
+                return;
+            }
+        }
+
+
+
+
+
+
+
+
+
+        // const { asset_id, public_id, eager } = res?.data;
+
+        const productData = {
+            banner: res ? {
+                asset_id: res?.data?.asset_id,
+                public_id: res?.data?.public_id,
+                secure_url: res?.data?.eager?.[0]?.secure_url
+            } : initialData?.banner,
+            title: values.name,
+            description: values.description,
+            quantity: values.quantity,
+            price: values.price,
+            stockStatus: values.status,
+            discount: values.discountedPrice,
+            category: values.category,
+            slug: values.name.toLowerCase()
         };
 
 
 
-        formData.forEach((key,value)=>{
+        formData.forEach((key, value) => {
             console.log(`key:${key} , value:${value}`)
         })
 
-        const sendData = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}product`,productData);
 
-        if(!sendData?.data.status)
-        {
-          
+        const sendData = productId ? await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}product/${productId}`, productData) : await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}product`, productData);
+
+        if (!sendData?.data.status) {
+
             toast.error("Failed To Create Product !!");
-            return ;
+            return;
         }
-          
+
 
         toast.success(productId ? "Product updated" : "Product created", {
             description: `${values.name} has been ${productId ? "updated" : "created"} successfully.`,
@@ -169,18 +175,18 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
 
 
     async function fetchCategories() {
-      try {
-        const res = await axios.get("/api/categories");
-        setCategoriesData(res?.data?.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      } finally {
-        // setLoading(false);
-      }
+        try {
+            const res = await axios.get("/api/categories");
+            setCategoriesData(res?.data?.data);
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        } finally {
+            // setLoading(false);
+        }
     }
-    useEffect(()=>{
+    useEffect(() => {
         fetchCategories()
-    },[])
+    }, [])
 
     return (
         <Form {...form}>
@@ -214,7 +220,6 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                                 </FormItem>
                             )}
                         />
-
                         <FormField
                             control={form.control}
                             name="category"
@@ -222,7 +227,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                                 <FormItem>
                                     <FormLabel>Category</FormLabel>
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl>
+                                        <FormControl className="w-full">
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Select a category" />
                                             </SelectTrigger>
@@ -230,24 +235,104 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                                         <SelectContent>
 
                                             {
-                                                categoriesData && categoriesData?.map((cat,idx)=>{
-                                                    return  <SelectItem key={idx} value={cat?._id}>{cat?.title}</SelectItem>
+                                                categoriesData && categoriesData?.map((cat, idx) => {
+                                                    return <SelectItem key={idx} value={cat?._id}>{cat?.title}</SelectItem>
 
                                                 })
                                             }
-                                            {/* <SelectItem value="Clothing">Clothing</SelectItem>
-                                            <SelectItem value="Home">Home</SelectItem>
-                                            <SelectItem value="Accessories">Accessories</SelectItem>
-                                            <SelectItem value="Fitness">Fitness</SelectItem> */}
+
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="price"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Price ($)</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" step="0.01" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="discountedPrice"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Discounted Price ($)</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                step="0.01"
+                                                placeholder="Optional"
+                                                {...field}
+                                                value={field.value || ""}
+                                                onChange={(e) => {
+                                                    const value = e.target.value === "" ? undefined : Number.parseFloat(e.target.value)
+                                                    field.onChange(value)
+                                                }}
+                                            />
+                                        </FormControl>
+                                        {/* <FormDescription>Leave empty if no discount</FormDescription> */}
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
 
+
+
                     <div className="space-y-6">
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="quantity"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Quantity</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="status"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Status</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl className="w-full">
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a status" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="In Stock">In Stock</SelectItem>
+                                                <SelectItem value="Low Stock">Low Stock</SelectItem>
+                                                <SelectItem value="Out of Stock">Out of Stock</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                        </div>
                         <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 h-[200px]">
                             {imagePreview ? (
                                 <div className="relative w-full h-full">
@@ -288,94 +373,17 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                             )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <FormField
-                                control={form.control}
-                                name="price"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Price ($)</FormLabel>
-                                        <FormControl>
-                                            <Input type="number" step="0.01" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
 
-                            <FormField
-                                control={form.control}
-                                name="discountedPrice"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Discounted Price ($)</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="number"
-                                                step="0.01"
-                                                placeholder="Optional"
-                                                {...field}
-                                                value={field.value || ""}
-                                                onChange={(e) => {
-                                                    const value = e.target.value === "" ? undefined : Number.parseFloat(e.target.value)
-                                                    field.onChange(value)
-                                                }}
-                                            />
-                                        </FormControl>
-                                        <FormDescription>Leave empty if no discount</FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <FormField
-                                control={form.control}
-                                name="quantity"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Quantity</FormLabel>
-                                        <FormControl>
-                                            <Input type="number" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="status"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Status</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a status" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="In Stock">In Stock</SelectItem>
-                                                <SelectItem value="Low Stock">Low Stock</SelectItem>
-                                                <SelectItem value="Out of Stock">Out of Stock</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
                     </div>
                 </div>
 
-               {isLoading ? <div>Loading...</div> : <div className="flex justify-end gap-4">
+                <div className="flex justify-end gap-4">
                     <Button type="button" variant="outline" onClick={() => router.push("/dashboard/products")}>
                         Cancel
                     </Button>
-                    <Button type="submit">{productId ? "Update Product" : "Create Product"}</Button>
-                </div>}
+                    {isLoading ? <Button type="button">Loading...</Button> : <Button type="submit">{productId ? "Update Product" : "Create Product"}</Button>}
+                </div>
             </form>
         </Form>
     )

@@ -5,9 +5,9 @@ import productModel from "../models/product";
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     await dbConnect();
-    const products = await productModel.find().populate('category');
+    const products = await productModel.find().populate("category");
 
-    console.log("prodc", products)
+    console.log("prodc", products);
     return NextResponse.json(
       { status: true, message: "Products Found Successfully!", data: products },
       { status: 200 }
@@ -22,12 +22,20 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 }
 
-
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-
     const body = await request.json();
-    const { title, description, price, discount, category, slug, banner, stockStatus } = body;
+    const {
+      title,
+      description,
+      price,
+      discount,
+      category,
+      slug,
+      banner,
+      quantity,
+      stockStatus,
+    } = body;
 
     if (!title || !price) {
       return NextResponse.json(
@@ -47,7 +55,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       banner, // Store the first uploaded file path as the banner
       discount,
       category,
-      slug
+      quantity,
+      slug,
     });
 
     if (!product) {
@@ -61,7 +70,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       { status: true, message: "Product Created Successfully!", data: product },
       { status: 201 }
     );
-
   } catch (error) {
     console.error("❌ Error Occurred:", error);
     return NextResponse.json(
@@ -70,6 +78,3 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
   }
 }
-
-
-

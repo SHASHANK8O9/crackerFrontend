@@ -79,7 +79,7 @@ export function ProductsTable() {
         {
             accessorKey: "category",
             header: "Category",
-            cell: ({ row }) => <div>{row.getValue("category")}</div>,
+            cell: ({ row }) => <div>{row.original.category?.title}</div>,
         },
         {
             accessorKey: "price",
@@ -91,14 +91,14 @@ export function ProductsTable() {
             ),
             cell: ({ row }) => {
                 const price = row.original.price
-                const discountedPrice = row.original.discount
+                const finalPrice = row.original.finalPrice
 
                 return (
                     <div className="flex flex-col">
-                        {discountedPrice ? (
+                        {finalPrice ? (
                             <>
                                 <span className="text-sm line-through text-muted-foreground">Rs{price.toFixed(2)}</span>
-                                <span className="font-medium text-green-600">Rs{discountedPrice.toFixed(2)}</span>
+                                <span className="font-medium text-green-600">Rs{finalPrice}</span>
                             </>
                         ) : (
                             <span className="font-medium">Rs{price.toFixed(2)}</span>
@@ -205,6 +205,7 @@ export function ProductsTable() {
     async function fetchProducts() {
         try {
             const res = await axios.get("/api/product")
+            console.log(res?.data?.data)
             setData(res?.data?.data)
         } catch (error) {
             console.error("Error fetching products:", error)

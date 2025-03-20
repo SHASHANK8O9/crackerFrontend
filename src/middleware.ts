@@ -32,7 +32,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/admin", request.url));
   }
   // Verify the token if it's a protected route
-  if (isProtectedRoute
+  if (
+    isProtectedRoute
     // ||
     //  isProtectedApiRoute
   ) {

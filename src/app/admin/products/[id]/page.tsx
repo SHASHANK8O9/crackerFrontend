@@ -4,7 +4,8 @@ import { use, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ProductForm } from "@/components/product-form"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { mockProducts, type Product } from "@/lib/data"
+import { type Product } from "@/lib/data"
+import axios from "axios"
 
 interface EditProductPageProps {
 
@@ -17,19 +18,26 @@ export default function EditProductPage({ params }: { params: Promise<EditProduc
     const router = useRouter()
     const [product, setProduct] = useState<Product | null>(null)
     const [loading, setLoading] = useState(true)
+    const findProduct = async () => {
+        try {
+            const foundProduct = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product/${id}`)
+            if (foundProduct) {
+                setProduct(foundProduct?.data?.data)
+            } else {
+                // Product not found, redirect to products page
+                router.push("/admin/products")
+            }
 
-    useEffect(() => {
-        // In a real app, you would fetch the product from an API
-        const foundProduct = mockProducts.find((p) => p.id === id)
-
-        if (foundProduct) {
-            setProduct(foundProduct)
-        } else {
-            // Product not found, redirect to products page
-            router.push("/admin/products")
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
         }
 
-        setLoading(false)
+    }
+    useEffect(() => {
+        // In a real app, you would fetch the product from an API
+        findProduct()
+
     }, [id, router])
 
     if (loading) {
