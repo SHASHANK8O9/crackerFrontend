@@ -1,131 +1,65 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from "react";
-import { Pencil, Trash } from "lucide-react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
+import { CategoryTable } from "@/components/category-table";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
+export default function CategoriesPage() {
+  const router = useRouter();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-interface Category {
-  _id: string;
-  title: string;
-  banner: string;
-}
-
-const CategoriesPage = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-
-      async function fetchCategories() {
-      try {
-        const res = await axios.get("/api/categories");
-        setCategories(res.data.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
   useEffect(() => {
-
     fetchCategories();
   }, []);
 
-  const handleEdit = (id: string) => {
-    console.log("Edit category:", id);
-    // Redirect to edit page or open modal
+  const fetchCategories = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`);
+      setCategories(data?.data);
+    } catch (error) {
+      toast.error("Failed to fetch categories");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmDelete = confirm("Are you sure you want to delete this category?");
-    if (!confirmDelete) return;
+  const handleEdit = (categoryId: string) => {
+    router.push(`/admin/categories/${categoryId}`);
+  };
+
+  const handleDelete = async (categoryId: string) => {
+    if (!confirm("Are you sure you want to delete this category?")) return;
 
     try {
-      const deleted = await axios.delete(`/api/categories/${id}`);
-
-      if(!deleted?.status)
-      {
-        toast.error("Failed To Delete !!");
-        return ;
-      }
-    fetchCategories();
+      await axios.delete(`/api/categories/${categoryId}`);
+      toast.success("Category deleted successfully");
+      setCategories((prev) => prev.filter((cat: any) => cat.id !== categoryId));
     } catch (error) {
-      console.error("Error deleting category:", error);
-       toast.error("Failed To Delete !!");
-
+      toast.error("Failed to delete category");
     }
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Categories</h1>
+    <div className="container mx-auto py-10 space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Categories</h1>
+        <Button onClick={() => router.push("/admin/categories/new")}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Category
+        </Button>
+      </div>
 
       {loading ? (
         <p>Loading categories...</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="p-3 text-left">Banner</th>
-                <th className="p-3 text-left">Title</th>
-                <th className="p-3 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.length > 0 ? (
-                categories.map((category) => (
-                  <tr key={category._id} className="border-t">
-                    <td className="p-3">
-                      <Image
-                        src={category?.banner?.secure_url || "/placeholder.svg"}
-                        alt={category.title}
-                        width={60}
-                        height={60}
-                        className="rounded-md object-cover"
-                      />
-                    </td>
-                    <td className="p-3">{category.title}</td>
-                    <td className="p-3 flex justify-center gap-4">
-                      <Button variant="outline" size="sm" onClick={() => handleEdit(category._id)}>
-                        <Pencil className="w-4 h-4" />
-                      </Button>
-                      <Button variant="destructive" size="sm" onClick={() => handleDelete(category._id)}>
-                        <Trash className="w-4 h-4" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={3} className="p-3 text-center">
-                    No categories found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <CategoryTable categories={categories} onEdit={handleEdit} onDelete={handleDelete} />
       )}
     </div>
   );
-};
-
-const page = () => {
-    return (
-        <div>
-        <CategoriesPage/>
-        </div>
-    )
 }
-
-
-
-
-
-
-
-
-export default page
