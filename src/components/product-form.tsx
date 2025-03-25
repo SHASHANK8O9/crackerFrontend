@@ -58,7 +58,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
     const [imagePreview, setImagePreview] = useState<string | null>(initialData?.banner?.secure_url || null)
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFile, setSelectedFile] = useState<any>(null);
-    const [categoriesData, setCategoriesData] = useState(null);
+    const [categoriesData, setCategoriesData] = useState<any>(null);
     // Default values for the form
     const defaultValues: Partial<ProductFormValues> = {
         name: initialData?.title || "",
@@ -235,7 +235,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                                         <SelectContent>
 
                                             {
-                                                categoriesData && categoriesData?.map((cat, idx) => {
+                                                categoriesData && categoriesData?.map((cat: any, idx: number) => {
                                                     return <SelectItem key={idx} value={cat?._id}>{cat?.title}</SelectItem>
 
                                                 })

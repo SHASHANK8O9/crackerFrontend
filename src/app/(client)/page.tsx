@@ -8,6 +8,10 @@ import ProductCard from "@/components/product-card"
 import TestimonialCard from "@/components/testimonial-card"
 import { CategoryCard } from "@/components/category-card"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import category from "../api/models/category"
 
 const products = [
   {
@@ -50,6 +54,27 @@ const products = [
 ]
 
 export default function HomePage() {
+  const searchParams = useSearchParams();
+  // const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  // Extract values from the URL
+  const searchQuery = searchParams.get("search") || "";
+  const selectedCategory = searchParams.get("category") || "";
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?search=${searchQuery}&category=${category}`);
+        console.log(response?.data)
+        // setProducts(response.data.products); // Assuming API returns { products: [...] }
+      } catch (error) {
+        console.error("Error fetching products", error);
+      }
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, [searchQuery, selectedCategory]);
   return (
     <div className="flex min-h-screen flex-col ">
       {/* Hero Section */}

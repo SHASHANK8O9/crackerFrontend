@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProductCard from "@/components/product-card";
+import SearchCategoryFilter from "@/components/search-category-flter";
 
 // Dummy product data
 const products = Array.from({ length: 20 }).map((_, i) => ({
@@ -41,26 +42,7 @@ export default function ProductListing() {
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Search and Filter Controls */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                <Input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full md:w-1/3"
-                />
-                <Select onValueChange={(value) => setSelectedCategory(value)}>
-                    <SelectTrigger className="w-full md:w-1/4">
-                        <SelectValue placeholder="Filter by Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="All">All</SelectItem>
-                        <SelectItem value="Firecracker">Firecracker</SelectItem>
-                        <SelectItem value="Gadget">Gadget</SelectItem>
-                        <SelectItem value="Accessory">Accessory</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
+            <SearchCategoryFilter />
 
             {/* Product Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -3,13 +3,42 @@ import { dbConnect } from "../lib/dbConnect";
 import productModel from "../models/product";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
+  const { searchParams } = new URL(request.url);
+  const search = searchParams.get("search");
+  const category = searchParams.get("category");
+  const page = parseInt(searchParams.get("page")) || 1;
+  const limit = parseInt(searchParams.get("limit")) || 10;
+  const skip = (page - 1) * limit;
+
   try {
     await dbConnect();
-    const products = await productModel.find().populate("category");
+    let filter: any = {}; //filter query
+    if (category) {
+      filter.category = category;
+    }
+    if (search) {
+      filter.title = { $regex: search, $options: "i" };
+    }
+    const totalProducts = await productModel.countDocuments();
+    const products = await productModel
+      .find(filter)
+      .populate("category")
+      .skip(skip)
+      .limit(limit);
 
     console.log("prodc", products);
     return NextResponse.json(
-      { status: true, message: "Products Found Successfully!", data: products },
+      {
+        status: true,
+        message: "Products Found Successfully!",
+        data: {
+          totalProducts,
+          page,
+          limit,
+          totalPages: Math.ceil(totalProducts / limit),
+          products,
+        },
+      },
       { status: 200 }
     );
   } catch (error) {

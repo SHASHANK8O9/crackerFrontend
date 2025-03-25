@@ -5,14 +5,24 @@ import categoryModel from "../models/category";
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     await dbConnect();
-    const categories = await categoryModel.find();
 
-    console.log(categories, "categories");
+    // Extract search query from the URL
+    const { searchParams } = new URL(request.url);
+    const searchQuery = searchParams.get("query") || "";
+    console.log(searchQuery, "searchQuery");
+
+    // Define a filter object based on the search query
+    const filter = searchQuery
+      ? { title: { $regex: searchQuery, $options: "i" } } // Case-insensitive search
+      : {};
+
+    // Find categories that match the filter
+    const categories = await categoryModel.find(filter);
 
     return NextResponse.json(
       {
         status: true,
-        message: "Products Found Successfully!",
+        message: "Categories Found Successfully!",
         data: categories,
       },
       { status: 200 }

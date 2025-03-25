@@ -9,17 +9,15 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body
-                className={`antialiased`}
-            >
-                <CartProvider>
-                    <SiteHeader />
-                    <main>{children}</main>
-                    <SiteFooter />
-                </CartProvider>
+        <div
+            className={`antialiased`}
+        >
+            <CartProvider>
+                <SiteHeader />
+                {children}
+                <SiteFooter />
+            </CartProvider>
 
-            </body>
-        </html>
+        </div>
     );
 }
