@@ -32,7 +32,7 @@ const SearchCategoryFilter = () => {
     }, []);
     // Update URL when searchQuery or category changes
     useEffect(() => {
-        const params = new URLSearchParams();
+        const params = new URLSearchParams(searchParams.toString()); // ✅ Keep existing params
         if (debouncedSearchQuery) params.set("search", debouncedSearchQuery);
         if (debouncedCategory) params.set("category", debouncedCategory);
         router.push(`?${params.toString()}`, { scroll: false });
@@ -41,7 +41,7 @@ const SearchCategoryFilter = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             {/* Search and Filter Controls */}
             <Input
-                type="text"
+                type="search"
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -54,8 +54,8 @@ const SearchCategoryFilter = () => {
                 <SelectContent>
                     <SelectItem value="All">All</SelectItem>
                     {
-                        categories?.map(item => {
-                            return <SelectItem key={item?._id} value={item?.title}>{item?.title}</SelectItem>
+                        categories?.map((item: any) => {
+                            return <SelectItem key={item?._id} value={item?._id}>{item?.title}</SelectItem>
                         })
                     }
 

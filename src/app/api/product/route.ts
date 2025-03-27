@@ -22,7 +22,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const totalProducts = await productModel.countDocuments();
     const products = await productModel
       .find(filter)
-      .populate("category")
+      .populate("categories")
       .skip(skip)
       .limit(limit);
 

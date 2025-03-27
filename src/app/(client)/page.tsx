@@ -11,62 +11,24 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import category from "../api/models/category"
 
-const products = [
-  {
-    id: 1,
-    name: "Cosmic Blast",
-    description:
-      "Experience the ultimate thrill with our premium Cosmic Blast firecracker. Creates a spectacular display of colors with loud, satisfying bangs.",
-    price: 24.99,
-    originalPrice: 29.99,
-    rating: 4,
-    reviewCount: 24,
-    image: "/placeholder.svg?height=300&width=500",
-    isNew: true,
-    limitedStock: true,
-  },
-  {
-    id: 2,
-    name: "Thunder King",
-    description:
-      "The Thunder King produces a massive boom that will shake the ground beneath your feet. Perfect for celebrations and special events.",
-    price: 19.99,
-    rating: 5,
-    reviewCount: 18,
-    image: "/placeholder.svg?height=300&width=500",
-    limitedStock: false,
-  },
-  {
-    id: 3,
-    name: "Color Fountain",
-    description:
-      "A beautiful fountain of colorful sparks that lasts for over a minute. Safe for family celebrations and creates amazing photo opportunities.",
-    price: 14.99,
-    originalPrice: 17.99,
-    rating: 4,
-    reviewCount: 32,
-    image: "/placeholder.svg?height=300&width=500",
-    isNew: false,
-    limitedStock: false,
-  },
-]
 
 export default function HomePage() {
   const searchParams = useSearchParams();
-  // const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   // Extract values from the URL
-  const searchQuery = searchParams.get("search") || "";
-  const selectedCategory = searchParams.get("category") || "";
+  const page = searchParams.get("page") || "1";
+  const limit = searchParams.get("limit") || "10";
+  const search = searchParams.get("search") || "";
+  const category = searchParams.get("category") || "";
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?search=${searchQuery}&category=${category}`);
-        console.log(response?.data)
-        // setProducts(response.data.products); // Assuming API returns { products: [...] }
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?page=${page}&search=${search}&category=${category}&limit=${limit}`)
+        console.log(data)
+        setProducts(data?.data?.products); // Assuming API returns { products: [...] }
       } catch (error) {
         console.error("Error fetching products", error);
       }
@@ -74,7 +36,7 @@ export default function HomePage() {
     };
 
     fetchProducts();
-  }, [searchQuery, selectedCategory]);
+  }, []);
   return (
     <div className="flex min-h-screen flex-col ">
       {/* Hero Section */}
@@ -145,7 +107,7 @@ export default function HomePage() {
             </Button>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((product) => (
+            {Array.isArray(products) && products.length > 0 && products.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>

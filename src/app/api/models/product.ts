@@ -1,15 +1,15 @@
-import mongoose, { Schema, model, Document } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import Category from "./category"; // Import the Category model
 
 // Define the Product interface
-interface IProduct extends Document {
+interface IProduct {
   title: string;
   price: number;
   discount: number;
   banner?: object;
   slug?: string;
   stockStatus?: string;
-  category?: mongoose.Schema.Types.ObjectId; // Reference to Category
+  categories?: string; // Reference to Category
   quantity?: string;
   description?: string;
 }
@@ -43,9 +43,9 @@ const productSchema = new Schema<IProduct>(
     stockStatus: {
       type: String,
     },
-    category: {
+    categories: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category", // Reference the Category model
+      ref: "Categories", // Reference the Category model
     },
     quantity: {
       type: String,

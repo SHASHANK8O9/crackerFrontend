@@ -1,70 +1,79 @@
 "use client";
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 import ProductCard from "@/components/product-card";
 import SearchCategoryFilter from "@/components/search-category-flter";
+import Pagination from "@/components/pagination";
+import { useSearchParams } from "next/navigation";
+import axios from "axios";
+import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
+import ProductCardSkeleton from "@/components/product-card-skeleton";
 
-// Dummy product data
-const products = Array.from({ length: 20 }).map((_, i) => ({
-    id: i + 1,
-    name: `Product ${i + 1}`,
-    description: "This is a sample product description.",
-    price: Math.floor(Math.random() * 500) + 100,
-    originalPrice: Math.random() > 0.5 ? Math.floor(Math.random() * 700) + 200 : undefined,
-    rating: Math.floor(Math.random() * 5) + 1,
-    reviewCount: Math.floor(Math.random() * 200),
-    image: "/placeholder.svg?height=300&width=500",
-    isNew: Math.random() > 0.7,
-    limitedStock: Math.random() > 0.8,
-    category: ["Firecracker", "Gadget", "Accessory"][Math.floor(Math.random() * 3)],
-}));
+interface Product {
+    _id: string;
+    title: string;
+    price: number;
+    discount: number;
+    banner: { secure_url: string };
+    slug: string;
+    stockStatus: string;
+    category: { _id: string; title: string };
+    quantity: string;
+    finalPrice: number;
+}
 
 export default function ProductListing() {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
+    const searchParams = useSearchParams();
+    const [products, setProducts] = useState<Product[]>([])
+    const [loading, setLoading] = useState(false)
 
-    // Filtered products
-    const filteredProducts = products.filter(
-        (product) =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            (selectedCategory === "" || product.category === selectedCategory)
-    );
-
-    // Pagination logic
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-    const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const [totalPages, setTotalPages] = useState(1);
+    // ✅ Always get values dynamically from searchParams
+    const page = searchParams.get("page") || "1";
+    const limit = searchParams.get("limit") || "10";
+    const search = searchParams.get("search") || "";
+    const category = searchParams.get("category") || "";
+    const fetchProducts = async () => {
+        try {
+            setLoading(true)
+            const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?page=${page}&search=${search}&category=${category}&limit=${limit}`);
+            console.log(data)
+            setProducts(data?.data?.products);
+            setTotalPages(data?.totalPages);
+            setLoading(false)
+        } catch (error) {
+            console.error("Error fetching products:", error);
+            toast.error("Error fetching products")
+            setLoading(false)
+            // Handle error (e.g., show toast notification)
+        }
+    }
+    useEffect(() => {
+        fetchProducts()
+        console.log(page, search, category, limit)
+    }, [searchParams])
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container min-h-screen mx-auto px-4 py-8">
             {/* Search and Filter Controls */}
             <SearchCategoryFilter />
 
             {/* Product Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {paginatedProducts.length > 0 ? (
-                    paginatedProducts.map((product) => <ProductCard key={product.id} {...product} />)
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 min-h-[60vh]">
+                {loading ? Array.from({ length: 8 })?.map(_ => {
+                    return <ProductCardSkeleton />
+                }) : products.length > 0 ? (
+                    products.map((product) => <ProductCard key={product._id} {...product} />)
                 ) : (
                     <p className="col-span-full text-center text-gray-500">No products found.</p>
                 )}
             </div>
 
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-                <div className="flex justify-center mt-6 gap-2">
-                    <Button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-                        Previous
-                    </Button>
-                    <span className="px-4 py-2 bg-gray-100 rounded">Page {currentPage} of {totalPages}</span>
-                    <Button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
-                        Next
-                    </Button>
-                </div>
-            )}
+            {/* Pagination */}
+            <Pagination totalPages={10} />
+
         </div>
     );
 }

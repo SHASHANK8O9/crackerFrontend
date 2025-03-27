@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { X, Plus, Minus, ShoppingCart } from "lucide-react"
+import { X, Plus, Minus, ShoppingCart, IndianRupee } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { Button } from "@/components/ui/button"
@@ -72,21 +72,21 @@ export default function CartView() {
                                     <div className="space-y-4">
                                         {items.map((item) => (
                                             <div key={item.id} className="flex items-center py-4 border-b">
-                                                <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border">
+                                                <div className="h-20 w-20 grid place-items-center flex-shrink-0 overflow-hidden rounded-md border">
                                                     <Image
                                                         src={item.image || "/placeholder.svg"}
                                                         alt={item.name}
                                                         width={80}
                                                         height={80}
-                                                        className="h-full w-full object-cover"
+                                                        className="size-16 object-contain"
                                                     />
                                                 </div>
                                                 <div className="ml-4 flex flex-1 flex-col">
                                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                                         <h3>{item.name}</h3>
-                                                        <p className="ml-4">${(item.price * item.quantity).toFixed(2)}</p>
+                                                        <p className="ml-4 flex justify-start items-center"><IndianRupee size={15} />{(item.price * item.quantity).toFixed(2)}</p>
                                                     </div>
-                                                    <p className="mt-1 text-sm text-gray-500">${item.price.toFixed(2)} each</p>
+                                                    <p className="mt-1 text-sm text-gray-500 flex justify-start items-center"><IndianRupee size={15} />{item.price.toFixed(2)} each</p>
                                                     <div className="flex items-center justify-between mt-2">
                                                         <div className="flex items-center border rounded-md">
                                                             <button
@@ -121,7 +121,7 @@ export default function CartView() {
                                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                                     <div className="flex justify-between text-base font-medium text-gray-900 mb-4">
                                         <p>Subtotal</p>
-                                        <p>${subtotal.toFixed(2)}</p>
+                                        <p className="flex justify-start items-center"><IndianRupee size={15} />{subtotal.toFixed(2)}</p>
                                     </div>
                                     <p className="text-sm text-gray-500 mb-4">Shipping and taxes calculated at checkout.</p>
                                     <Button className="w-full bg-red-600 hover:bg-red-700 mb-2" onClick={handleCheckout}>
