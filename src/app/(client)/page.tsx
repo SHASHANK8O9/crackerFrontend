@@ -52,7 +52,7 @@ export default function HomePage() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
-
+          <Image className="absolute opacity-20" src='/LogoC.jpg' height={200} width={300} alt="logo" />
           {/* Main heading */}
           <div className="text-center max-w-4xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-4">
@@ -63,8 +63,10 @@ export default function HomePage() {
               Experience premium quality and discover a safer way to celebrate your special occasions brilliantly.
             </p>
 
-            <Button className="bg-red-500 cursor-pointer hover:bg-red-600/90">Shop Our Collection</Button>
-          </div>
+            <Link href='/products'>
+              <Button className="bg-red-500 cursor-pointer hover:bg-red-600/90">Shop Our Collection</Button>
+
+            </Link>          </div>
         </div>
       </div>
 
@@ -268,43 +270,21 @@ export default function HomePage() {
               Browse our extensive collection of premium fireworks or download our latest pricelist
             </p>
             <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-              <Button size="lg" className="bg-yellow-500 text-black hover:bg-yellow-400">
-                Shop Now <ShoppingBag className="ml-2 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-red-500">
-                Download Pricelist <Download className="ml-2 h-5 w-5" />
-              </Button>
+              <Link href='/products'>
+                <Button size="lg" className="bg-yellow-500 text-black hover:bg-yellow-400">
+                  Shop Now <ShoppingBag className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href='/PriceList.pdf' download>
+                <Button size="lg" variant="outline" className="border-white text-red-500">
+                  Download Pricelist <Download className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl rounded-2xl bg-gray-50 p-8 shadow-sm">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900">Stay Updated with Latest Offers</h2>
-              <p className="mt-2 text-gray-600">
-                Subscribe to our newsletter for exclusive deals and festival specials
-              </p>
-            </div>
-            <form className="mt-6">
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 rounded-lg border border-gray-300 px-4 py-3 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/20"
-                  required
-                />
-                <Button type="submit" className="bg-red-600 hover:bg-red-700">
-                  Subscribe <Send className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

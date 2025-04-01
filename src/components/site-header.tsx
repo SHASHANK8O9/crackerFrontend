@@ -51,11 +51,12 @@ export default function SiteHeader() {
                     <div className="flex items-center">
                         <Link href="/" className="flex items-center">
                             <Image
-                                src="/placeholder.svg?height=50&width=200"
+
+                                src={`/LogoC.jpg`}
                                 alt="Vasantham Crackers World"
-                                width={200}
+                                width={50}
                                 height={50}
-                                className="h-10 w-auto"
+                                className="w-auto"
                             />
                         </Link>
                     </div>
@@ -71,15 +72,15 @@ export default function SiteHeader() {
                         <Link href="/products" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600">
                             Products
                         </Link>
-                        <Link href="/gift-box" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600">
-                            Gift Box
-                        </Link>
+
                         <Link href="/contact" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600">
                             Contact Us
                         </Link>
-                        <Button size="sm" className="ml-3 bg-red-600 hover:bg-red-700">
-                            <Download className="mr-2 h-4 w-4" /> Download Pricelist
-                        </Button>
+                        <a href="/PriceList.pdf" download>
+                            <Button size="sm" className="ml-3 cursor-pointer bg-red-600 hover:bg-red-700">
+                                <Download className="mr-2 h-4 w-4" /> Download Pricelist
+                            </Button>
+                        </a>
 
                         {/* Cart Component */}
                         <div className="ml-3">
