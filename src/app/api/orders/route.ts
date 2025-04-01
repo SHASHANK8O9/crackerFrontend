@@ -42,3 +42,20 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function GET(request: NextRequest) {
+  await dbConnect();
+  try {
+    const orders = await order.find();
+    return NextResponse.json(
+      { status: true, message: "Orders fetched successfully!", data: orders },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("❌ Error Occurred:", error);
+    return NextResponse.json(
+      { status: false, message: "Internal Server Error", error },
+      { status: 500 }
+    );
+  }
+}

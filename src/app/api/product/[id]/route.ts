@@ -98,7 +98,7 @@ export async function PATCH(
         stockStatus,
         banner, // Store the first uploaded file path as the banner
         discount,
-        category,
+        categories: category,
         slug,
       },
       { new: true }

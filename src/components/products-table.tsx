@@ -79,7 +79,7 @@ export function ProductsTable() {
         {
             accessorKey: "category",
             header: "Category",
-            cell: ({ row }) => <div>{row.original.category?.title}</div>,
+            cell: ({ row }) => <div>{row.original.categories?.title}</div>,
         },
         {
             accessorKey: "price",
@@ -206,7 +206,7 @@ export function ProductsTable() {
         try {
             const res = await axios.get("/api/product")
             console.log(res?.data?.data)
-            setData(res?.data?.data)
+            setData(res?.data?.data?.products)
         } catch (error) {
             console.error("Error fetching products:", error)
         }

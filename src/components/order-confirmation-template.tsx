@@ -1,142 +1,135 @@
-// emails/OrderConfirmation.tsx
 import {
-    Html,
-    Head,
-    Preview,
     Body,
     Container,
-    Section,
-    Heading,
-    Text,
-    Hr,
     Column,
-    Row,
+    Head,
+    Heading,
+    Hr,
+    Html,
     Img,
-} from '@react-email/components';
+    Link,
+    Preview,
+    Row,
+    Section,
+    Text,
+} from "@react-email/components"
+import * as React from "react"
 
 interface OrderItem {
-    id: string;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
+    id: string
+    name: string
+    price: number
+    quantity: number
+    image: string
 }
 
-interface OrderConfirmationProps {
-    fullName: string;
-    email: string;
-    phone: string;
-    address: string;
-    notes: string;
-    orderItems: OrderItem[];
+interface OrderConfirmationEmailProps {
+    fullName: string
+    email: string
+    phone: string
+    address: string
+    orderNotes: string
+    orderItems: OrderItem[]
 }
-
-export const OrderConfirmation: React.FC<Readonly<OrderConfirmationProps>> = ({
+export const OrderConfirmation: React.FC<Readonly<OrderConfirmationEmailProps>> = ({
     fullName,
     email,
     phone,
     address,
-    notes,
+    orderNotes,
     orderItems,
 }) => {
-    const totalAmount = orderItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-    );
+    const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
     return (
         <Html>
             <Head />
-            <Preview>Your Order Confirmation</Preview>
+            <Preview>Your order has been confirmed</Preview>
             <Body style={main}>
                 <Container style={container}>
-                    <Section style={header}>
-                        <Heading style={heading}>Order Confirmation</Heading>
-                        <Text style={subHeading}>Thank you for your order, {fullName}!</Text>
+                    <Section style={logoContainer}>
+                        {/* <Img src={`${baseUrl}/logo.png`} width="120" height="36" alt="Your Store" style={logo} /> */}
                     </Section>
-
                     <Section style={section}>
-                        <Heading as="h2" style={sectionHeading}>
-                            Customer Information
-                        </Heading>
-                        <Row>
-                            <Column>
-                                <Text style={label}>Full Name:</Text>
-                                <Text style={value}>{fullName}</Text>
-                            </Column>
-                            <Column>
-                                <Text style={label}>Email:</Text>
-                                <Text style={value}>{email}</Text>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                                <Text style={label}>Phone:</Text>
-                                <Text style={value}>{phone}</Text>
-                            </Column>
-                            <Column>
-                                <Text style={label}>Address:</Text>
-                                <Text style={value}>{address}</Text>
-                            </Column>
-                        </Row>
-                        {notes && (
-                            <Row>
-                                <Column>
-                                    <Text style={label}>Notes:</Text>
-                                    <Text style={value}>{notes}</Text>
-                                </Column>
-                            </Row>
-                        )}
-                    </Section>
+                        <Heading style={h1}>Order Confirmation</Heading>
+                        <Text style={text}>Hi {fullName},</Text>
+                        <Text style={text}>Thank you for your order. We've received your order and are processing it now.</Text>
 
-                    <Hr style={divider} />
+                        <Section style={orderInfoSection}>
+                            <Heading as="h2" style={h2}>
+                                Customer Information
+                            </Heading>
+                            <Text style={text}>
+                                <strong>Name:</strong> {fullName}
+                            </Text>
+                            <Text style={text}>
+                                <strong>Email:</strong> {email}
+                            </Text>
+                            <Text style={text}>
+                                <strong>Phone:</strong> {phone}
+                            </Text>
+                            <Text style={text}>
+                                <strong>Address:</strong>{" "}
+                                {address.split("\n").map((line, i) => (
+                                    <React.Fragment key={i}>
+                                        {line}
+                                        {i < address.split("\n").length - 1 && <br />}
+                                    </React.Fragment>
+                                ))}
+                            </Text>
+                            {orderNotes && (
+                                <>
+                                    <Text style={text}>
+                                        <strong>Order Notes:</strong>
+                                    </Text>
+                                    <Text style={noteText}>{orderNotes}</Text>
+                                </>
+                            )}
+                        </Section>
 
-                    <Section style={section}>
-                        <Heading as="h2" style={sectionHeading}>
-                            Order Items
-                        </Heading>
-                        {orderItems.map((item) => (
-                            <Row key={item.id} style={itemRow}>
-                                <Column style={itemImageCol}>
-                                    <Img
-                                        src={item.image}
-                                        alt={item.name}
-                                        width="40"
-                                        height="40"
-                                        style={itemImage}
-                                    />
-                                </Column>
-                                <Column style={itemDetailsCol}>
-                                    <Text style={itemName}>{item.name}</Text>
-                                    <Text style={itemPrice}>${item.price.toFixed(2)}</Text>
-                                    <Text style={itemQuantity}>Qty: {item.quantity}</Text>
-                                </Column>
-                                <Column style={itemTotalCol}>
-                                    <Text style={itemTotal}>
-                                        Rs.{(item.price * item.quantity).toFixed(2)}
+                        <Hr style={hr} />
+
+                        <Section>
+                            <Heading as="h2" style={h2}>
+                                Order Details
+                            </Heading>
+
+                            {orderItems.map((item) => (
+                                <Row key={item.id} style={orderItem}>
+                                    <Column style={imageColumn}>
+                                        <Img src={item.image} width="80" height="80" alt={item.name} style={productImage} />
+                                    </Column>
+                                    <Column style={detailsColumn}>
+                                        <Text style={productName}>{item.name}</Text>
+                                        <Text style={productMeta}>
+                                            Quantity: {item.quantity} × ${item.price.toFixed(2)}
+                                        </Text>
+                                        <Text style={productPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
+                                    </Column>
+                                </Row>
+                            ))}
+
+                            <Hr style={hr} />
+
+                            <Row style={totalRow}>
+                                <Column style={{ width: "100%" }}>
+                                    <Text style={totalText}>
+                                        <strong>Total:</strong> ${totalAmount.toFixed(2)}
                                     </Text>
                                 </Column>
                             </Row>
-                        ))}
-                    </Section>
+                        </Section>
 
-                    <Hr style={divider} />
+                        <Hr style={hr} />
 
-                    <Section style={totalSection}>
-                        <Row>
-                            <Column>
-                                <Text style={totalLabel}>Total Amount:</Text>
-                            </Column>
-                            <Column>
-                                <Text style={totalAmountStyle}>${totalAmount.toFixed(2)}</Text>
-                            </Column>
-                        </Row>
-                    </Section>
-
-                    <Section style={footer}>
-                        <Text style={footerText}>
-                            If you have any questions, please contact our support team.
-                        </Text>
+                        <Section>
+                            <Text style={footerText}>
+                                If you have any questions about your order, please contact our customer service at{" "}
+                                <Link href="mailto:support@yourstore.com" style={link}>
+                                    support@yourstore.com
+                                </Link>
+                            </Text>
+                        </Section>
                     </Section>
                 </Container>
             </Body>
@@ -145,139 +138,139 @@ export const OrderConfirmation: React.FC<Readonly<OrderConfirmationProps>> = ({
 };
 
 // Styles
+// Styles
 const main = {
-    backgroundColor: '#f6f9fc',
+    backgroundColor: "#f6f9fc",
     fontFamily:
-        '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',
+}
 
 const container = {
-    backgroundColor: '#ffffff',
-    margin: '0 auto',
-    padding: '20px 0 48px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-};
+    backgroundColor: "#ffffff",
+    margin: "0 auto",
+    padding: "20px 0",
+    maxWidth: "600px",
+}
 
-const header = {
-    padding: '0 24px',
-};
+const logoContainer = {
+    padding: "20px",
+    borderBottom: "1px solid #e6ebf1",
+}
 
-const heading = {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '8px',
-};
-
-const subHeading = {
-    fontSize: '16px',
-    color: '#666',
-};
+const logo = {
+    margin: "0 auto",
+}
 
 const section = {
-    padding: '0 24px',
-    marginTop: '24px',
-};
+    padding: "0 24px",
+}
 
-const sectionHeading = {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '16px',
-};
+const h1 = {
+    color: "#333",
+    fontSize: "24px",
+    fontWeight: "bold",
+    margin: "30px 0",
+    padding: "0",
+    textAlign: "center" as const,
+}
 
-const label = {
-    fontSize: '14px',
-    color: '#666',
-    marginBottom: '4px',
-};
+const h2 = {
+    color: "#333",
+    fontSize: "20px",
+    fontWeight: "bold",
+    margin: "24px 0 16px",
+}
 
-const value = {
-    fontSize: '14px',
-    color: '#333',
-    marginBottom: '12px',
-};
+const text = {
+    color: "#333",
+    fontSize: "16px",
+    lineHeight: "24px",
+    margin: "12px 0",
+}
 
-const divider = {
-    borderColor: '#e6ebf1',
-    margin: '20px 0',
-};
+const noteText = {
+    color: "#666",
+    fontSize: "14px",
+    fontStyle: "italic",
+    lineHeight: "21px",
+    margin: "12px 0",
+    padding: "12px",
+    backgroundColor: "#f9f9f9",
+    borderRadius: "4px",
+}
 
-const itemRow = {
-    marginBottom: '16px',
-    display: 'flex',
-    alignItems: 'center',
-};
+const orderInfoSection = {
+    backgroundColor: "#f9f9f9",
+    padding: "16px",
+    borderRadius: "4px",
+    margin: "24px 0",
+}
 
-const itemImageCol = {
-    width: '80px',
-};
+const hr = {
+    borderColor: "#e6ebf1",
+    margin: "20px 0",
+}
 
-const itemDetailsCol = {
-    paddingLeft: '16px',
-    flex: 1,
-};
+const orderItem = {
+    margin: "12px 0",
+}
 
-const itemTotalCol = {
-    width: '80px',
-    textAlign: 'right' as const,
-};
+const imageColumn = {
+    width: "80px",
+    verticalAlign: "top",
+}
 
-const itemImage = {
-    borderRadius: '4px',
-};
+const detailsColumn = {
+    paddingLeft: "16px",
+    verticalAlign: "top",
+}
 
-const itemName = {
-    fontSize: '14px',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '4px',
-};
+const productImage = {
+    borderRadius: "4px",
+    border: "1px solid #e6ebf1",
+}
 
-const itemPrice = {
-    fontSize: '14px',
-    color: '#666',
-    marginBottom: '4px',
-};
+const productName = {
+    color: "#333",
+    fontSize: "16px",
+    fontWeight: "bold",
+    margin: "0 0 4px",
+}
 
-const itemQuantity = {
-    fontSize: '14px',
-    color: '#666',
-};
+const productMeta = {
+    color: "#666",
+    fontSize: "14px",
+    margin: "0 0 4px",
+}
 
-const itemTotal = {
-    fontSize: '14px',
-    fontWeight: 'bold',
-    color: '#333',
-};
+const productPrice = {
+    color: "#333",
+    fontSize: "14px",
+    fontWeight: "bold",
+    margin: "8px 0 0",
+}
 
-const totalSection = {
-    padding: '0 24px',
-    marginTop: '24px',
-};
+const totalRow = {
+    margin: "12px 0",
+}
 
-const totalLabel = {
-    fontSize: '16px',
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'right' as const,
-};
-
-const totalAmountStyle = {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'right' as const,
-};
-
-const footer = {
-    padding: '0 24px',
-    marginTop: '24px',
-    textAlign: 'center' as const,
-};
+const totalText = {
+    color: "#333",
+    fontSize: "18px",
+    fontWeight: "bold",
+    textAlign: "right" as const,
+}
 
 const footerText = {
-    fontSize: '12px',
-    color: '#999',
-};
+    color: "#666",
+    fontSize: "14px",
+    lineHeight: "21px",
+    margin: "24px 0",
+    textAlign: "center" as const,
+}
+
+const link = {
+    color: "#2754C5",
+    textDecoration: "underline",
+}
+

@@ -83,7 +83,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       stockStatus,
       banner, // Store the first uploaded file path as the banner
       discount,
-      category,
+      categories: category,
       quantity,
       slug,
     });

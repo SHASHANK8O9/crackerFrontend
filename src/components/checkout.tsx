@@ -18,6 +18,7 @@ import { useCart } from "@/contexts/cart-contexts"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import axios from "axios"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 // Define validation schema
 const formSchema = z.object({
@@ -39,6 +40,7 @@ const formSchema = z.object({
 export default function Checkout() {
     const { items, clearCart, subtotal } = useCart()
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
     const [formSubmitted, setFormSubmitted] = useState(false)
     console.log(items)
@@ -64,6 +66,8 @@ export default function Checkout() {
             const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}orders`, payload)
             setLoading(false)
             toast.success("Submitted!")
+            router.push('/products')
+            clearCart()
             console.log(data)
         } catch (error) {
             setLoading(false)
