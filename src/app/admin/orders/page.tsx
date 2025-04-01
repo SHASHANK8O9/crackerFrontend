@@ -201,7 +201,7 @@ export default function OrdersPage() {
             </div>
             {/* Order Details Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="max-w-3xl">
+                <DialogContent className="sm:max-w-4xl h-[80vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Order Details</DialogTitle>
                     </DialogHeader>
