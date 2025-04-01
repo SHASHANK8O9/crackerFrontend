@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema({
         unique: true,
         trim: true,
         minlength: [1, "Min Length For Title is 1"],
-        maxlength: [2000, "Min Length For Title is 2000"]
+        maxlength: [2000, "Max Length For Title is 2000"]
     },
     price: {
         type: Number
@@ -34,11 +34,15 @@ const productSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    finalPrice: {
-        type: Number
-    }
+
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+productSchema.virtual("finalPrice").get(function () {
+    return this?.price - (this?.price * (this.discount / 100));
 });
 
 export default mongoose.models.Product || mongoose.model("Product", productSchema);

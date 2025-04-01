@@ -5,7 +5,7 @@ import productModel from "../models/product";
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     await dbConnect();
-    const products = await productModel.find().populate('category');
+    const products = await productModel.find().lean();
 
     console.log("prodc", products)
     return NextResponse.json(
