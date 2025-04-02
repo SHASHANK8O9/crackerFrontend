@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-import Category from "./category"; // Import the Category model
 
 // Define the Product interface
 interface IProduct {

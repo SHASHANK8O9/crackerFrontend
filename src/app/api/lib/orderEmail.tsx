@@ -11,13 +11,10 @@ export const orderEmail = async (
     email: string,
     orderData: any
 ) => {
-    console.log(SMTP_PASS, SMTP_USER)
     try {
         if (!email) throw new Error("Recipient email is required");
         if (!orderData) throw new Error("Order data is missing");
         if (!SMTP_USER || !SMTP_PASS) throw new Error("SMTP credentials are missing");
-
-        console.log("Sending order email...", orderData);
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
