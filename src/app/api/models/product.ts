@@ -44,7 +44,7 @@ const productSchema = new Schema<IProduct>(
     },
     categories: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Categories", // Reference the Category model
+      ref: "Category", // Reference the Category model
     },
     quantity: {
       type: String,
