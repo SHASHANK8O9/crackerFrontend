@@ -43,7 +43,7 @@ export default function ProductCard({
         setIsAdding(true);
 
         addItem({
-            id: _id,
+            id: Number(_id),
             name: title,
             price: finalPrice,
             quantity: 1,

@@ -28,7 +28,7 @@ export default function EditCategoryPage() {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}categories/${categoryId}`)
       if (data) {
         console.log(data, "data")
-        setCategory({ name: data?.data?.title, imageUrl: data?.data?.banner?.secure_url })
+        setCategory({ id: data?.data?._id, name: data?.data?.title, imageUrl: data?.data?.banner?.secure_url })
       } else {
         // Product not found, redirect to products page
         router.push("/admin/categories")
