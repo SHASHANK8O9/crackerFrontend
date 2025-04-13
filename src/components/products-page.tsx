@@ -72,7 +72,7 @@ export default function ProductPage() {
             </div>
 
             {/* Pagination */}
-            <Pagination totalPages={10} />
+            <Pagination totalPages={Number(totalPages)} />
 
         </div>
     );

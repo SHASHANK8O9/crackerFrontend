@@ -14,6 +14,7 @@ interface PaginationProps {
 const Pagination = ({ totalPages }: PaginationProps) => {
     const router = useRouter();
     const searchParams = useSearchParams();
+    console.log(totalPages)
 
     // ✅ Ensure `currentPage` is always a number (Fixes TS warnings)
     const initialPage = Number(searchParams.get("page")) || 1;

@@ -8,9 +8,54 @@ import ProductCard from "@/components/product-card"
 import TestimonialCard from "@/components/testimonial-card"
 import { CategoryCard } from "@/components/category-card"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import axios from "axios"
+
+const testimonials = [
+    {
+        name: "Rajesh Kumar",
+        location: "Chennai, Tamil Nadu",
+        quote: "The quality of fireworks from Vasantham Crackers is exceptional. My family was thrilled with our Diwali celebration this year!",
+        rating: 5,
+        image: "https://ui-avatars.com/api/?name=Rajesh+Kumar&background=random&size=60",
+    },
+    {
+        name: "Priya Sharma",
+        location: "Coimbatore, Tamil Nadu",
+        quote: "Fast delivery and excellent product range. The gift box was perfect for my nephew's birthday celebration.",
+        rating: 5,
+        image: "https://ui-avatars.com/api/?name=Priya+Sharma&background=random&size=60",
+    },
+    {
+        name: "Anand Patel",
+        location: "Madurai, Tamil Nadu",
+        quote: "I've been buying from Vasantham for the past 5 years. Their consistent quality and service keeps me coming back.",
+        rating: 4,
+        image: "https://ui-avatars.com/api/?name=Anand+Patel&background=random&size=60",
+    },
+    {
+        name: "Lakshmi Narayanan",
+        location: "Thiruvananthapuram, Kerala",
+        quote: "Very satisfied with the eco-friendly cracker options. Delivery was smooth and everything arrived safely.",
+        rating: 5,
+        image: "https://ui-avatars.com/api/?name=Lakshmi+Narayanan&background=random&size=60",
+    },
+    {
+        name: "Deepak Reddy",
+        location: "Hyderabad, Telangana",
+        quote: "We had a blast this Diwali! Vasantham Crackers made it easy to surprise our kids with something special.",
+        rating: 5,
+        image: "https://ui-avatars.com/api/?name=Deepak+Reddy&background=random&size=60",
+    },
+    {
+        name: "Meena Krishnan",
+        location: "Bengaluru, Karnataka",
+        quote: "Smooth ordering experience and great packaging. I really appreciate the variety of traditional crackers.",
+        rating: 4,
+        image: "https://ui-avatars.com/api/?name=Meena+Krishnan&background=random&size=60",
+    },
+];
 
 
 export default function HomePage() {
@@ -22,6 +67,7 @@ export default function HomePage() {
     const limit = searchParams.get("limit") || "10";
     const search = searchParams.get("search") || "";
     const category = searchParams.get("category") || "";
+    const router = useRouter()
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
@@ -104,7 +150,11 @@ export default function HomePage() {
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Best Selling Products</h2>
                             <p className="mt-2 text-lg text-gray-600">Our most popular fireworks loved by customers</p>
                         </div>
-                        <Button variant="outline" className="group">
+                        <Button
+                            onClick={() => {
+                                router.push('/products')
+                            }}
+                            variant="outline" className="group">
                             View All Products <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Button>
                     </div>
@@ -234,28 +284,20 @@ export default function HomePage() {
                         </p>
                     </div>
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        <TestimonialCard
-                            name="Rajesh Kumar"
-                            location="Chennai"
-                            quote="The quality of fireworks from Vasantham Crackers is exceptional. My family was thrilled with our Diwali celebration this year!"
-                            rating={5}
-                            image="/placeholder.svg?height=60&width=60"
-                        />
-                        <TestimonialCard
-                            name="Priya Sharma"
-                            location="Coimbatore"
-                            quote="Fast delivery and excellent product range. The gift box was perfect for my nephew's birthday celebration."
-                            rating={5}
-                            image="/placeholder.svg?height=60&width=60"
-                        />
-                        <TestimonialCard
-                            name="Anand Patel"
-                            location="Madurai"
-                            quote="I've been buying from Vasantham for the past 5 years. Their consistent quality and service keeps me coming back."
-                            rating={4}
-                            image="/placeholder.svg?height=60&width=60"
-                        />
+                        {testimonials.map((testimonial, index) => (
+                            <TestimonialCard
+                                key={index}
+                                name={testimonial.name}
+                                location={testimonial.location}
+                                quote={testimonial.quote}
+                                rating={testimonial.rating}
+                                image={testimonial.image}
+                            />
+                        ))}
                     </div>
+
+
+
                 </div>
             </section>
 

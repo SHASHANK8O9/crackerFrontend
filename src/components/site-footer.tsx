@@ -10,13 +10,15 @@ export default function SiteFooter() {
             <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     <div>
-                        <Link href="/" className="mb-6 inline-block">
+                        {/* src="/placeholder.svg?height=50&width=200" */}
+                        <Link href="/" className="flex items-center">
                             <Image
-                                src="/placeholder.svg?height=50&width=200"
+
+                                src={`/LogoC.jpg`}
                                 alt="Vasantham Crackers World"
-                                width={200}
-                                height={50}
-                                className="h-10 w-auto"
+                                width={40}
+                                height={40}
+                                className="w-auto"
                             />
                         </Link>
                         <p className="mb-6 text-gray-400">
