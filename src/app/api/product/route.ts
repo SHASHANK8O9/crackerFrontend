@@ -19,9 +19,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     if (search) {
       filter.title = { $regex: search, $options: "i" };
     }
+
     const totalProducts = await productModel.countDocuments();
-    const products = await productModel
-      .find(filter)
+    const products = await productModel.find(filter)
       .populate("categories")
       .skip(skip)
       .limit(limit);

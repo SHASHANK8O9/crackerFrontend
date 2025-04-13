@@ -121,7 +121,7 @@ export default function HomePage() {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center">
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                            Why Choose Vasantham Crackers
+                            Why Choose Nammapettikadai Crackers
                         </h2>
                         <p className="mt-4 text-lg text-gray-600">We're committed to quality, safety, and customer satisfaction</p>
                     </div>
@@ -235,9 +235,9 @@ export default function HomePage() {
                     </div>
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         <TestimonialCard
-                            name="Rajesh Kumar"
+                            name="Mutu Swami"
                             location="Chennai"
-                            quote="The quality of fireworks from Vasantham Crackers is exceptional. My family was thrilled with our Diwali celebration this year!"
+                            quote="The quality of fireworks from Nammapettikadai Crackers is exceptional. My family was thrilled with our Diwali celebration this year!"
                             rating={5}
                             image="/placeholder.svg?height=60&width=60"
                         />
@@ -251,7 +251,7 @@ export default function HomePage() {
                         <TestimonialCard
                             name="Anand Patel"
                             location="Madurai"
-                            quote="I've been buying from Vasantham for the past 5 years. Their consistent quality and service keeps me coming back."
+                            quote="I've been buying from Nammapettikadai for the past 5 years. Their consistent quality and service keeps me coming back."
                             rating={4}
                             image="/placeholder.svg?height=60&width=60"
                         />

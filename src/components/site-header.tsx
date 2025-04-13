@@ -53,7 +53,7 @@ export default function SiteHeader() {
                             <Image
 
                                 src={`/LogoC.jpg`}
-                                alt="Vasantham Crackers World"
+                                alt="NAMMAPETIKADAI Crackers World"
                                 width={50}
                                 height={50}
                                 className="w-auto"

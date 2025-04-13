@@ -11,13 +11,16 @@ export default function SiteFooter() {
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     <div>
                         <Link href="/" className="mb-6 inline-block">
-                            <Image
-                                src="/placeholder.svg?height=50&width=200"
-                                alt="Vasantham Crackers World"
-                                width={200}
-                                height={50}
-                                className="h-10 w-auto"
-                            />
+                            <Link href="/" className="flex items-center">
+                                <Image
+
+                                    src={`/LogoC.jpg`}
+                                    alt="Vasantham Crackers World"
+                                    width={50}
+                                    height={50}
+                                    className="w-auto rounded-md"
+                                />
+                            </Link>
                         </Link>
                         <p className="mb-6 text-gray-400">
                             A reputed and reliable name in the field of Fireworks trading business for past 10 years, offering quality
@@ -145,7 +148,7 @@ export default function SiteFooter() {
                     </div>
                 </div>
                 <div className="mt-12 border-t border-gray-800 pt-8 text-center">
-                    <p>© {new Date().getFullYear()} Vasantham Crackers World. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} Nammapettikadai Crackers World. All rights reserved.</p>
                 </div>
             </div>
         </footer>
