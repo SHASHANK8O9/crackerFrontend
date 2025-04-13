@@ -12,6 +12,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   try {
     await dbConnect();
+<<<<<<< HEAD
     let filter: any = {}; //filter query
     if (category) {
       filter.category = category;
@@ -19,6 +20,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     if (search) {
       filter.title = { $regex: search, $options: "i" };
     }
+=======
+    const products = await productModel.find().lean();
+>>>>>>> e8463ae842c879caf630b2000f2fe814ba51082a
 
     const totalProducts = await productModel.countDocuments();
     const products = await productModel.find(filter)

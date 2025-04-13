@@ -21,7 +21,7 @@ const productSchema = new Schema<IProduct>(
       unique: true,
       trim: true,
       minlength: [1, "Min Length For Title is 1"],
-      maxlength: [2000, "Max Length For Title is 2000"],
+      maxlength: [2000, "Min Length For Title is 2000"]
     },
     price: {
       type: Number,
@@ -50,24 +50,13 @@ const productSchema = new Schema<IProduct>(
       type: String,
     },
     description: {
-      type: String,
+      type: String
     },
-  },
-  {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
-);
-
-// Add the virtual field with rounding
-productSchema.virtual("finalPrice").get(function (this: IProduct) {
-  const discount = this.discount || 0; // Default to 0 if discount is null/undefined
-  const finalPrice = this.price - this.price * (discount / 100);
-  return Math.round(finalPrice); // Round to the nearest integer
+    finalPrice: {
+      type: Number
+    }
+  }, {
+  timestamps: true
 });
 
-// Create and export the model
-const Product =
-  mongoose.models.Product || mongoose.model<IProduct>("Product", productSchema);
-export default Product;
+export default mongoose.models.Product || mongoose.model("Product", productSchema);
