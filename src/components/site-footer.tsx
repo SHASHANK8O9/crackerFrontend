@@ -142,7 +142,7 @@ export default function SiteFooter() {
                     </div>
                 </div>
                 <div className="mt-12 border-t border-gray-800 pt-8 text-center">
-                    <p>© {new Date().getFullYear()} Vasantham Crackers World. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} Nammapettikdai. All rights reserved.</p>
                 </div>
             </div>
         </footer>
