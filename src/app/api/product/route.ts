@@ -14,7 +14,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     await dbConnect();
     let filter: any = {}; //filter query
     if (category) {
-      filter.category = category;
+      filter.categories = category;
     }
     if (search) {
       filter.title = { $regex: search, $options: "i" };

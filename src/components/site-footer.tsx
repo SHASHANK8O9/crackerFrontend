@@ -123,24 +123,19 @@ export default function SiteFooter() {
                         <ul className="space-y-4">
                             <li className="flex items-start">
                                 <MapPin className="mr-3 h-5 w-5 shrink-0 text-red-500" />
-                                <span>123 Fireworks Street, Sivakasi, Tamil Nadu, India - 626123</span>
+                                <span>216, Servaikaranpatty Post, Gujiliamparai, Dindigul- 624620</span>
                             </li>
-                            <li className="flex items-center">
-                                <Phone className="mr-3 h-5 w-5 shrink-0 text-red-500" />
-                                <a href="tel:+919585593485" className="hover:text-white">
-                                    +91 95855 93485
-                                </a>
-                            </li>
+
                             <li className="flex items-center">
                                 <Phone className="mr-3 h-5 w-5 shrink-0 text-red-500" />
                                 <a href="tel:+919092780866" className="hover:text-white">
-                                    +91 90927 80866
+                                    +91 6380544276
                                 </a>
                             </li>
                             <li className="flex items-center">
                                 <Mail className="mr-3 h-5 w-5 shrink-0 text-red-500" />
-                                <a href="mailto:info@vasanthamcrackers.com" className="hover:text-white">
-                                    info@vasanthamcrackers.com
+                                <a href="mailto:nammapettikdai@gmail.com " className="hover:text-white">
+                                    nammapettikdai@gmail.com
                                 </a>
                             </li>
                         </ul>
