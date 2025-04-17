@@ -72,7 +72,7 @@ export default function SiteFooter() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/gift-box" className="hover:text-white">
+                                <Link href="/categories/gift-box" className="hover:text-white">
                                     Gift Box
                                 </Link>
                             </li>
@@ -87,32 +87,32 @@ export default function SiteFooter() {
                         <h3 className="mb-6 text-lg font-semibold text-white">Products</h3>
                         <ul className="space-y-3">
                             <li>
-                                <Link href="/products/sparklers" className="hover:text-white">
+                                <Link href="/categories/sparklers" className="hover:text-white">
                                     Sparklers
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/products/ground-chakkar" className="hover:text-white">
+                                <Link href="/categories/ground-chakkar" className="hover:text-white">
                                     Ground Chakkar
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/products/rockets" className="hover:text-white">
+                                <Link href="/categories/rockets" className="hover:text-white">
                                     Rockets
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/products/flower-pots" className="hover:text-white">
+                                <Link href="/categories/flower-pots" className="hover:text-white">
                                     Flower Pots
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/products/atom-bombs" className="hover:text-white">
+                                <Link href="/categories/atom-bombs" className="hover:text-white">
                                     Atom Bombs
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/products/gift-boxes" className="hover:text-white">
+                                <Link href="/categories/gift-boxes" className="hover:text-white">
                                     Gift Boxes
                                 </Link>
                             </li>
