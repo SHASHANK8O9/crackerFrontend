@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Trash, Upload } from "lucide-react"
+import { IndianRupee, Trash, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -255,7 +255,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                                 name="price"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Price ($)</FormLabel>
+                                        <FormLabel>Price <IndianRupee size={14} /> </FormLabel>
                                         <FormControl>
                                             <Input type="number" step="0.01" {...field} />
                                         </FormControl>
@@ -269,7 +269,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                                 name="discountedPrice"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Discounted Price ($)</FormLabel>
+                                        <FormLabel>Discounted Price <IndianRupee size={14} /></FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="number"

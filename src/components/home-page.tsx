@@ -16,7 +16,7 @@ const testimonials = [
     {
         name: "Rajesh Kumar",
         location: "Chennai, Tamil Nadu",
-        quote: "The quality of fireworks from Vasantham Crackers is exceptional. My family was thrilled with our Diwali celebration this year!",
+        quote: "The quality of fireworks from nammapettikada Crackers is exceptional. My family was thrilled with our Diwali celebration this year!",
         rating: 5,
         image: "https://ui-avatars.com/api/?name=Rajesh+Kumar&background=random&size=60",
     },
@@ -30,7 +30,7 @@ const testimonials = [
     {
         name: "Anand Patel",
         location: "Madurai, Tamil Nadu",
-        quote: "I've been buying from Vasantham for the past 5 years. Their consistent quality and service keeps me coming back.",
+        quote: "I've been buying from nammapettikada for the past 5 years. Their consistent quality and service keeps me coming back.",
         rating: 4,
         image: "https://ui-avatars.com/api/?name=Anand+Patel&background=random&size=60",
     },
@@ -44,7 +44,7 @@ const testimonials = [
     {
         name: "Deepak Reddy",
         location: "Hyderabad, Telangana",
-        quote: "We had a blast this Diwali! Vasantham Crackers made it easy to surprise our kids with something special.",
+        quote: "We had a blast this Diwali! nammapettikada Crackers made it easy to surprise our kids with something special.",
         rating: 5,
         image: "https://ui-avatars.com/api/?name=Deepak+Reddy&background=random&size=60",
     },
@@ -124,20 +124,18 @@ export default function HomePage() {
                         <p className="mt-4 text-lg text-gray-600">Find the perfect fireworks for every occasion and celebration</p>
                     </div>
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-                        <CategoryCard title="Sparklers" icon="/sparkles.png" href="/categories/sparklers" />
+                        <CategoryCard title="Sparklers" icon="/sparkles.png" href="/products" />
                         <CategoryCard
                             title="Ground Chakkar"
                             icon="/chakri.png"
-                            href="/categories/ground-chakkar"
-                        />
-                        <CategoryCard title="Rockets" icon="/rocket.png" href="/categories/rockets" />
+                            href="/products" />
+                        <CategoryCard title="Rockets" icon="/rocket.png" href="/products" />
                         <CategoryCard
                             title="Flower Pots"
                             icon="/anaar.png"
-                            href="/categories/flower-pots"
-                        />
-                        <CategoryCard title="Atom Bombs" icon="/bomb.png" href="/categories/atom-bombs" />
-                        <CategoryCard title="Gift Boxes" icon="/gift.png" href="/categories/gift-boxes" />
+                            href="/products" />
+                        <CategoryCard title="Atom Bombs" icon="/bomb.png" href="/products" />
+                        <CategoryCard title="Gift Boxes" icon="/gift.png" href="/products" />
                     </div>
                 </div>
             </section>
@@ -171,7 +169,7 @@ export default function HomePage() {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="mb-12 text-center">
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                            Why Choose Vasantham Crackers
+                            Why Choose nammapettikada Crackers
                         </h2>
                         <p className="mt-4 text-lg text-gray-600">We're committed to quality, safety, and customer satisfaction</p>
                     </div>
