@@ -15,19 +15,19 @@ export default function SiteHeader() {
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
             {/* Top Bar */}
-            <div className="bg-gray-50 py-2">
+            {/* <div className="bg-gray-50 py-2">
                 <div className="container mx-auto flex flex-wrap items-center justify-between px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-4">
                         <a href="tel:+919585593485" className="flex items-center gap-1 text-sm text-gray-600 hover:text-red-600">
                             <Phone className="h-4 w-4" />
-                            <span>+91 95855 93485</span>
+                            <span>+91 6380544276 </span>
                         </a>
 
                     </div>
                     <div className="flex items-center gap-4">
                         <a href="#" className="flex items-center gap-1 text-sm text-gray-600 hover:text-red-600">
                             <MapPin className="h-4 w-4" />
-                            <span>Sivakasi, Tamil Nadu</span>
+                            <span>216, Servaikaranpatty Post, Gujiliamparai, Dindigul-624620</span>
                         </a>
                         <div className="md:flex hidden items-center gap-2">
                             <a href="#" aria-label="Facebook" className="text-gray-600 hover:text-blue-600">
@@ -43,7 +43,7 @@ export default function SiteHeader() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Main Header */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">

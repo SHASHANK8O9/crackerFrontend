@@ -52,11 +52,22 @@ const productSchema = new Schema<IProduct>(
     description: {
       type: String
     },
-    finalPrice: {
-      type: Number
-    }
-  }, {
-  timestamps: true
+  },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+// Add the virtual field with rounding
+productSchema.virtual("finalPrice").get(function (this: IProduct) {
+  const discount = this.discount || 0; // Default to 0 if discount is null/undefined
+  const finalPrice = this.price - this.price * (discount / 100);
+  return Math.round(finalPrice); // Round to the nearest integer
 });
 
-export default mongoose.models.Product || mongoose.model("Product", productSchema);
+// Create and export the model
+const Product =
+  mongoose.models.Product || mongoose.model<IProduct>("Product", productSchema);
+export default Product;

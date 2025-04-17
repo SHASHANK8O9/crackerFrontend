@@ -40,7 +40,7 @@ export default function ProductPage() {
             const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?page=${page}&search=${search}&category=${category}&limit=${limit}`);
             console.log(data)
             setProducts(data?.data?.products);
-            setTotalPages(data?.totalPages);
+            setTotalPages(data?.data?.totalPages);
             setLoading(false)
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -72,7 +72,7 @@ export default function ProductPage() {
             </div>
 
             {/* Pagination */}
-            <Pagination totalPages={10} />
+            <Pagination totalPages={Number(totalPages)} />
 
         </div>
     );

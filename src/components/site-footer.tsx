@@ -10,17 +10,16 @@ export default function SiteFooter() {
             <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     <div>
-                        <Link href="/" className="mb-6 inline-block">
-                            <Link href="/" className="flex items-center">
-                                <Image
+                        {/* src="/placeholder.svg?height=50&width=200" */}
+                        <Link href="/" className="flex items-center">
+                            <Image
 
-                                    src={`/LogoC.jpg`}
-                                    alt="Vasantham Crackers World"
-                                    width={50}
-                                    height={50}
-                                    className="w-auto rounded-md"
-                                />
-                            </Link>
+                                src={`/LogoC.jpg`}
+                                alt="Vasantham Crackers World"
+                                width={40}
+                                height={40}
+                                className="w-auto"
+                            />
                         </Link>
                         <p className="mb-6 text-gray-400">
                             A reputed and reliable name in the field of Fireworks trading business for past 10 years, offering quality
@@ -124,31 +123,26 @@ export default function SiteFooter() {
                         <ul className="space-y-4">
                             <li className="flex items-start">
                                 <MapPin className="mr-3 h-5 w-5 shrink-0 text-red-500" />
-                                <span>123 Fireworks Street, Sivakasi, Tamil Nadu, India - 626123</span>
+                                <span>216, Servaikaranpatty Post, Gujiliamparai, Dindigul- 624620</span>
                             </li>
-                            <li className="flex items-center">
-                                <Phone className="mr-3 h-5 w-5 shrink-0 text-red-500" />
-                                <a href="tel:+919585593485" className="hover:text-white">
-                                    +91 95855 93485
-                                </a>
-                            </li>
+
                             <li className="flex items-center">
                                 <Phone className="mr-3 h-5 w-5 shrink-0 text-red-500" />
                                 <a href="tel:+919092780866" className="hover:text-white">
-                                    +91 90927 80866
+                                    +91 6380544276
                                 </a>
                             </li>
                             <li className="flex items-center">
                                 <Mail className="mr-3 h-5 w-5 shrink-0 text-red-500" />
-                                <a href="mailto:info@vasanthamcrackers.com" className="hover:text-white">
-                                    info@vasanthamcrackers.com
+                                <a href="mailto:nammapettikdai@gmail.com " className="hover:text-white">
+                                    nammapettikdai@gmail.com
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div className="mt-12 border-t border-gray-800 pt-8 text-center">
-                    <p>© {new Date().getFullYear()} Nammapettikadai Crackers World. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} Nammapettikdai. All rights reserved.</p>
                 </div>
             </div>
         </footer>
