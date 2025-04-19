@@ -6,12 +6,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
   const search = searchParams.get("search");
   const category = searchParams.get("category");
+  const cat = searchParams.get("cat")
   const page = parseInt(searchParams.get("page") ?? "1");
   const limit = parseInt(searchParams.get("limit") ?? "10");
   const skip = (page - 1) * limit;
 
   try {
     await dbConnect();
+
     let filter: any = {}; //filter query
     if (category) {
       filter.categories = category;
@@ -19,9 +21,60 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     if (search) {
       filter.title = { $regex: search, $options: "i" };
     }
+
+    if (cat) {
+
+      const products = await productModel.aggregate([
+        {
+          $lookup: {
+            from: "categories",
+            localField: "categories",
+            foreignField: "_id",
+            as: "categories"
+          }
+        },
+        {
+          $addFields: {
+            category: { $first: "$categories" }
+          }
+        },
+        {
+          $project: {
+            categories: 0
+          }
+        },
+        {
+          $match: {
+            "category.title": {
+              $regex: cat,
+              $options: "i"
+            }
+          }
+        }
+      ]
+      );
+
+      const totalProducts = products?.length || 0;
+
+      return NextResponse.json(
+        {
+          status: true,
+          message: "Products Found Successfully!",
+          data: {
+            totalProducts,
+            page,
+            limit,
+            totalPages: Math.ceil(totalProducts / limit),
+            products,
+          },
+        },
+        { status: 200 }
+      );
+    }
+
+
     const totalProducts = await productModel.countDocuments();
-    const products = await productModel
-      .find(filter)
+    const products = await productModel.find(filter)
       .populate("categories")
       .skip(skip)
       .limit(limit);

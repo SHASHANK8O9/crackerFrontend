@@ -19,7 +19,7 @@ export default function TestimonialCard({ name, location, quote, rating, image }
                     <Image src={image || "/placeholder.svg"} alt={name} fill className="object-cover" />
                 </div>
                 <div>
-                    <h3 className="font-bold text-gray-900">{name}</h3>
+                    <h3 className="font-bold text-gray-900">{name} </h3>
                     <p className="text-sm text-gray-500">{location}</p>
                 </div>
             </div>

@@ -21,7 +21,7 @@ const productSchema = new Schema<IProduct>(
       unique: true,
       trim: true,
       minlength: [1, "Min Length For Title is 1"],
-      maxlength: [2000, "Max Length For Title is 2000"],
+      maxlength: [2000, "Min Length For Title is 2000"]
     },
     price: {
       type: Number,
@@ -50,7 +50,7 @@ const productSchema = new Schema<IProduct>(
       type: String,
     },
     description: {
-      type: String,
+      type: String
     },
   },
   {

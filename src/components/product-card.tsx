@@ -108,9 +108,9 @@ export default function ProductCard({
 
                 {/* Price */}
                 <div className="mb-4 flex items-center justify-between">
-                    <div className="text-xl font-bold text-gray-900">₹{finalPrice.toFixed(2)}</div>
+                    <div className="text-xl font-bold text-gray-900">₹{(finalPrice || (price / 100 * discount))?.toFixed(2)}</div>
                     {discount > 0 && (
-                        <div className="text-sm text-gray-500 line-through">₹{price.toFixed(2)}</div>
+                        <div className="text-sm text-gray-500 line-through">₹{price?.toFixed(2)}</div>
                     )}
                 </div>
 
