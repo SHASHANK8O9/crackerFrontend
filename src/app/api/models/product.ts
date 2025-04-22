@@ -21,7 +21,7 @@ const productSchema = new Schema<IProduct>(
       unique: true,
       trim: true,
       minlength: [1, "Min Length For Title is 1"],
-      maxlength: [2000, "Min Length For Title is 2000"]
+      maxlength: [2000, "Min Length For Title is 2000"],
     },
     price: {
       type: Number,
@@ -44,13 +44,13 @@ const productSchema = new Schema<IProduct>(
     },
     categories: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category", // Reference the Category model
+      ref: "Categories", // Reference the Category model
     },
     quantity: {
       type: String,
     },
     description: {
-      type: String
+      type: String,
     },
   },
   {
