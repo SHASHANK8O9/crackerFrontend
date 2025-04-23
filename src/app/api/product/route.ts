@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../lib/dbConnect";
-import productModel from "../models/product";
+import productModel from "../../../models/product";
+import "../../../models/category";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
   const search = searchParams.get("search");
   const category = searchParams.get("category");
-  const cat = searchParams.get("cat")
+  const cat = searchParams.get("cat");
   const page = parseInt(searchParams.get("page") ?? "1");
   const limit = parseInt(searchParams.get("limit") ?? "10");
   const skip = (page - 1) * limit;
@@ -23,36 +24,34 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     if (cat) {
-
       const products = await productModel.aggregate([
         {
           $lookup: {
             from: "categories",
             localField: "categories",
             foreignField: "_id",
-            as: "categories"
-          }
+            as: "categories",
+          },
         },
         {
           $addFields: {
-            category: { $first: "$categories" }
-          }
+            category: { $first: "$categories" },
+          },
         },
         {
           $project: {
-            categories: 0
-          }
+            categories: 0,
+          },
         },
         {
           $match: {
             "category.title": {
               $regex: cat,
-              $options: "i"
-            }
-          }
-        }
-      ]
-      );
+              $options: "i",
+            },
+          },
+        },
+      ]);
 
       const totalProducts = products?.length || 0;
 
@@ -72,9 +71,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-
     const totalProducts = await productModel.countDocuments();
-    const products = await productModel.find(filter)
+    const products = await productModel
+      .find(filter)
       .populate("categories")
       .skip(skip)
       .limit(limit);
@@ -94,11 +93,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error Occurred:", error);
 
     return NextResponse.json(
-      { status: false, message: "Internal Server Error", error },
+      { status: false, message: error.message },
       { status: 500 }
     );
   }

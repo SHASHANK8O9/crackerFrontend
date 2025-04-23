@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../lib/dbConnect";
-import order from "../models/order";
+import order from "../../../models/order";
 import { orderEmail } from "../lib/orderEmail";
 
 export async function POST(request: NextRequest) {

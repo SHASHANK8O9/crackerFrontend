@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../lib/dbConnect";
-import categoryModel from "../../models/category";
+import categoryModel from "../../../../models/category";
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

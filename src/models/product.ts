@@ -1,14 +1,14 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 // Define the Product interface
-interface IProduct {
+interface IProduct extends Document {
   title: string;
   price: number;
   discount: number;
   banner?: object;
   slug?: string;
   stockStatus?: string;
-  categories?: string; // Reference to Category
+  categories?: mongoose.Schema.Types.ObjectId; // Reference to Category
   quantity?: string;
   description?: string;
 }
@@ -44,8 +44,9 @@ const productSchema = new Schema<IProduct>(
     },
     categories: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Categories", // Reference the Category model
+      ref: "Category", // capitalized to match model
     },
+
     quantity: {
       type: String,
     },

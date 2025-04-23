@@ -1,3 +1,4 @@
+// category.model.ts or category.js
 import mongoose from "mongoose";
 
 const categorySchema = new mongoose.Schema(
@@ -18,4 +19,4 @@ const categorySchema = new mongoose.Schema(
 );
 
 export default mongoose.models.Category ||
-  mongoose.model("Category", categorySchema, 'categories');
+  mongoose.model("Category", categorySchema);

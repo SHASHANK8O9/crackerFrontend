@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../lib/dbConnect";
-import productModel from "../../models/product";
+import productModel from "../../../../models/product";
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
