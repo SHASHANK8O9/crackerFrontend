@@ -19,7 +19,7 @@ const SearchCategoryFilter = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}categories`);
+                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}category`);
                 console.log(data)
                 setCategories(data?.data);
             } catch (error) {
@@ -54,8 +54,8 @@ const SearchCategoryFilter = () => {
                 <SelectContent>
                     <SelectItem value="All">All</SelectItem>
                     {
-                        categories?.map((item: any) => {
-                            return <SelectItem key={item?._id} value={item?._id}>{item?.title}</SelectItem>
+                        categories?.map((item: any, idx: number) => {
+                            return <SelectItem key={idx} value={item?._id}>{item?.title}</SelectItem>
                         })
                     }
 

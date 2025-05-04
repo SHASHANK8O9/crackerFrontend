@@ -72,9 +72,9 @@ export default function HomePage() {
         const fetchProducts = async () => {
             setLoading(true);
             try {
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?page=${page}&search=${search}&category=${category}&limit=${limit}`)
+                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?page=${page}&search=${search}&category=${category}&limit=${10}`)
                 console.log(data)
-                setProducts(data?.data?.products); // Assuming API returns { products: [...] }
+                setProducts(data?.data); // Assuming API returns { products: [...] }
             } catch (error) {
                 console.error("Error fetching products", error);
             }

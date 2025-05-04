@@ -38,9 +38,9 @@ export default function ProductPage() {
         try {
             setLoading(true)
             const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?page=${page}&search=${search}&category=${category}&limit=${limit}`);
-            console.log(data)
-            setProducts(data?.data?.products);
-            setTotalPages(data?.data?.totalPages);
+            console.log("data", data)
+            setProducts(data?.data);
+            setTotalPages(data?.pagination?.totalPages);
             setLoading(false)
         } catch (error) {
             console.error("Error fetching products:", error);

@@ -89,7 +89,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
         }
         if (selectedFile) {
             formData.append("file", selectedFile);
-            formData.append("upload_preset", "TESTING_PRESET");
+            formData.append("upload_preset", "CrackerFrontend");
             formData.append("folder ", "DUMMY");
 
             formData.forEach((key, values) => {
@@ -105,6 +105,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
             ) {
                 console.log("Failed To Upload Image !!");
                 toast.error("Failed To Upload Images !!");
+                setIsLoading(false);
                 return;
             }
         }

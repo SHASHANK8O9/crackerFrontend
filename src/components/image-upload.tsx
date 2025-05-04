@@ -28,7 +28,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
 
             const formData = new FormData()
             formData.append("file", file)
-            formData.append("upload_preset", "TESTING_PRESET")
+            formData.append("upload_preset", "CrackerFrontend")
             formData.append("folder", "DUMMY")
 
             // Log form data for debugging

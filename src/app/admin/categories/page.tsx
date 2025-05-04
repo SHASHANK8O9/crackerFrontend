@@ -20,7 +20,7 @@ export default function CategoriesPage() {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/categories`);
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}category`);
       setCategories(data?.data);
     } catch (error) {
       toast.error("Failed to fetch categories");
@@ -37,7 +37,7 @@ export default function CategoriesPage() {
     if (!confirm("Are you sure you want to delete this category?")) return;
 
     try {
-      await axios.delete(`/api/categories/${categoryId}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}category/${categoryId}`);
       toast.success("Category deleted successfully");
       setCategories((prev) => prev.filter((cat: any) => cat.id !== categoryId));
     } catch (error) {

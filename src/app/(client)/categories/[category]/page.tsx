@@ -26,8 +26,8 @@ export default function page() {
             setLoading(true)
             const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product?page=${page}&cat=${category}&limit=${limit}`);
             console.log(data)
-            setProducts(data?.data?.products);
-            setTotalPages(data?.data?.totalPages);
+            setProducts(data?.data);
+            setTotalPages(data?.pagination?.totalPages);
             setLoading(false)
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -56,7 +56,7 @@ export default function page() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 min-h-[60vh]">
                     {loading ? Array.from({ length: 8 })?.map(_ => {
                         return <ProductCardSkeleton />
-                    }) : products.length > 0 ? (
+                    }) : products?.length > 0 ? (
                         products.map((product) => <ProductCard key={product?._id} {...product} />)
                     ) : (
                         <p className="col-span-full text-center text-gray-500">No products found.</p>
@@ -64,7 +64,7 @@ export default function page() {
                 </div>
 
                 {/* Pagination */}
-                <Pagination totalPages={Number(totalPages)} />
+                {/* <Pagination totalPages={Number(totalPages)} /> */}
 
             </div>
 

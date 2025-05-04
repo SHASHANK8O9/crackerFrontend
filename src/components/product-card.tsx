@@ -20,13 +20,13 @@ type Product = {
     stockStatus: string;
     categories: { _id: string; title: string };
     quantity: string;
-    finalPrice: number;
+    discountedPrice: number;
 };
 
 export default function ProductCard({
     _id,
     title,
-    finalPrice,
+    discountedPrice,
     price,
     discount,
     banner,
@@ -45,7 +45,7 @@ export default function ProductCard({
         addItem({
             id: Number(_id),
             name: title,
-            price: finalPrice,
+            price: discountedPrice,
             quantity: 1,
             image: banner.secure_url,
         });
@@ -108,11 +108,16 @@ export default function ProductCard({
 
                 {/* Price */}
                 <div className="mb-4 flex items-center justify-between">
-                    <div className="text-xl font-bold text-gray-900">₹{(finalPrice || (price / 100 * discount))?.toFixed(2)}</div>
+                    <div className="text-xl font-bold text-gray-900">
+                        ₹{discount > 0 ? discountedPrice?.toFixed(2) : price?.toFixed(2)}
+                    </div>
                     {discount > 0 && (
-                        <div className="text-sm text-gray-500 line-through">₹{price?.toFixed(2)}</div>
+                        <div className="text-sm text-gray-500 line-through">
+                            ₹{price?.toFixed(2)}
+                        </div>
                     )}
                 </div>
+
 
                 {/* Add to cart button */}
                 <Button className="w-full bg-red-600 hover:bg-red-700 gap-2 py-6" onClick={handleAddToCart} disabled={isAdding}>
