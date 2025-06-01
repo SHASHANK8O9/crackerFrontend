@@ -58,7 +58,17 @@ export default function EditProductPage({ params }: { params: Promise<EditProduc
                     <CardDescription>Update the details for this product.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ProductForm productId={id} initialData={product} />
+                    <ProductForm
+                        productId={id}
+                        initialData={
+                            product
+                                ? {
+                                    ...product,
+                                    discount: product.discount === null ? undefined : product.discount,
+                                }
+                                : null
+                        }
+                    />
                 </CardContent>
             </Card>
         </div>

@@ -23,7 +23,7 @@ const formSchema = z.object({
     category: z.string({ required_error: "Please select a category." }), // Stores category _id
     price: z.coerce.number().positive("Price must be a positive number."),
     discountedPrice: z.coerce.number().positive("Discounted price must be positive.").optional(),
-    // quantity: z.coerce.number().int().nonnegative("Quantity must be non-negative."),
+    quantity: z.coerce.number().int().nonnegative("Quantity must be a non-negative integer."),
     status: z.enum(["In Stock", "Low Stock", "Out of Stock"], { required_error: "Please select status." }),
 })
 
@@ -66,7 +66,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
         description: "",
         category: "",
         price: 0,
-        discountedPrice: undefined,
+        discountedPrice: 0,
         quantity: 0,
         status: "In Stock",
     }
@@ -124,7 +124,7 @@ export function ProductForm({ productId, initialData }: ProductFormProps) {
                 const cloudinaryFormData = new FormData()
                 cloudinaryFormData.append("file", selectedFile)
                 cloudinaryFormData.append("upload_preset", "CrackerFrontend") // Ensure this preset exists
-                cloudinaryFormData.append("folder", "DUMMY")
+                cloudinaryFormData.append("folder", "FRONTEND")
 
                 const cloudinaryRes = await axios.post(
                     `${process.env.NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_URL}/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
