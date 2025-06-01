@@ -20,7 +20,7 @@ export default function EditProductPage({ params }: { params: Promise<EditProduc
     const [loading, setLoading] = useState(true)
     const findProduct = async () => {
         try {
-            const foundProduct = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product/${id}`)
+            const foundProduct = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}product/single/${id}`)
             if (foundProduct) {
                 setProduct(foundProduct?.data?.data)
             } else {
