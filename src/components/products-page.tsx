@@ -21,6 +21,7 @@ interface Product {
     categories: { _id: string; title: string };
     quantity: string;
     finalPrice: number;
+    discountedPrice: any;
 }
 
 export default function ProductPage() {
