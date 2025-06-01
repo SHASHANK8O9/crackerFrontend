@@ -23,8 +23,8 @@ const formSchema = z.object({
     category: z.string({ required_error: "Please select a category." }), // Stores category _id
     price: z.coerce.number().positive("Price must be a positive number."),
     discountedPrice: z.coerce.number().positive("Discounted price must be positive.").optional(),
-    quantity: z.coerce.number().int().nonnegative("Quantity must be a non-negative integer."),
     status: z.enum(["In Stock", "Low Stock", "Out of Stock"], { required_error: "Please select status." }),
+    quantity: z.any().optional(), // Assuming quantity can be any type, adjust as needed
 })
 
 type ProductFormValues = z.infer<typeof formSchema>
