@@ -4,7 +4,7 @@ export type Product = {
   title: string;
   description?: string;
   banner: { secure_url: string };
-  category: string;
+  category: any;
   price: number;
   discount: number | null;
   quantity: number;
